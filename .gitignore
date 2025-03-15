@@ -1,0 +1,7 @@
+*.o
+output/
+*.dll
+*.so
+*.a
+*.exe
+warpengine-test
