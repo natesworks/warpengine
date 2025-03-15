@@ -10,3 +10,8 @@ public:
 private:
     SDL_Window *gameWindow = nullptr;
 };
+
+class InitialisationFailed
+{
+
+};
