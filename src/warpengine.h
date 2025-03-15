@@ -5,8 +5,8 @@
 class Game
 {
 public:
-    Game(int x, int y, int w, int h, std::string title = "Warp Engine");
-    Game(int w, int h, std::string title = "Warp Engine");
+    Game(int x, int y, int w, int h, std::string title = "Warp Engine", bool borderless = false);
+    Game(int w, int h, std::string title = "Warp Engine", bool borderless = false);
     Game(std::string title = "Warp Engine");
 private:
     SDL_Window *gameWindow = nullptr;

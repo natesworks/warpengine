@@ -6,7 +6,7 @@ int main()
 {
     try
     {
-        Game game(800, 600);
+        Game game(800, 600, "Game", true);
     }
     catch (InitialisationFailed)
     {
