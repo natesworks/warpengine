@@ -59,5 +59,6 @@ Game::Game(std::string title)
 
 Game::~Game()
 {
-
+    SDL_DestroyWindow(gameWindow);
+    SDL_DestroyRenderer(renderer);
 }
