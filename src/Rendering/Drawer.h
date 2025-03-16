@@ -1,14 +1,16 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+
 #include "../RGB.h"
+#include "../Game.h"
 
 class Drawer
 {
 public:
-    Drawer(SDL_Renderer *renderer) : renderer(renderer) {};
+    Drawer(Game *game) : game(game) {};
     void drawLine(int x1, int y1, int x2, int y2, RGB color);
 
 private:
-    SDL_Renderer *renderer;
+    Game *game;
 };

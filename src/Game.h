@@ -9,6 +9,8 @@ class Game
 {
 public:
     SDL_Renderer *renderer = nullptr;
+    float scaleX;
+    float scaleY;
 
     Game(int x, int y, int w, int h, std::string title = "Game", bool borderless = false);
     Game(int w, int h, std::string title = "Game", bool borderless = false);
@@ -19,9 +21,11 @@ public:
 
 private:
     SDL_Window *gameWindow = nullptr;
+    int originalWidth;
+    int originalHeight;
 };
 
 class InitialisationFailed {};
 class WindowCreationFailed {};
 class RendererCreationFailed {};
-class RenderFailure {};
+class RenderFailed {};

@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_video.h>
 #include <string.h>
 #include <iostream>
 
@@ -23,7 +24,11 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     {
         throw WindowCreationFailed();
     }
-    // SDL_SetWindowResizable(gameWindow, SDL_TRUE);
+    originalWidth = w;
+    originalHeight = h;
+    scaleX = w / 1920.0f ;
+    scaleY = w / 1080.0f;
+    SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
 
     if (!renderer)
@@ -35,8 +40,7 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     if (SDL_RenderClear(renderer) != 0)
     {
-        std::cerr << "Renderering failed: " << SDL_GetError() << std::endl;
-        throw RenderFailure();
+        throw RenderFailed();
     }
     SDL_RenderPresent(renderer);
 }
@@ -55,14 +59,26 @@ Game::Game(std::string title)
     {
         throw WindowCreationFailed();
     }
-    // SDL_SetWindowResizable(gameWindow, SDL_TRUE);
+    SDL_DisplayMode displayMode;
+    if (SDL_GetDesktopDisplayMode(0, &displayMode) != 0)
+    {
+        throw WindowCreationFailed();
+    }
+    originalWidth = displayMode.w;
+    originalHeight = displayMode.h;
+    scaleX = 1920.0f / displayMode.w;
+    scaleY = 1080.0f / displayMode.h;
+    SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
     if (!renderer)
     {
         throw RendererCreationFailed();
     }
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderClear(renderer);
+    if (SDL_RenderClear(renderer) != 0)
+    {
+        throw RenderFailed();
+    }
     SDL_RenderPresent(renderer);
 }
 
@@ -88,5 +104,19 @@ void Game::handleEvents()
     case SDL_QUIT:
         exit(0);
         break;
+    case SDL_WINDOWEVENT:
+        if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+        {
+            int newWidth, newHeight;
+            SDL_GetWindowSize(gameWindow, &newWidth, &newHeight);
+
+            SDL_Rect newViewport = {0, 0, newWidth, newHeight};
+            SDL_RenderSetViewport(renderer, &newViewport);
+
+            scaleX = (float)newWidth / originalWidth;
+            scaleY = (float)newHeight / originalHeight;
+
+            break;
+        }
     }
 }

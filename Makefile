@@ -1,5 +1,5 @@
 CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 `sdl2-config --cflags`
+CXXFLAGS := -Wall -Wextra -std=c++17 `sdl2-config --cflags` -g
 LDFLAGS := `sdl2-config --libs`
 SRC := $(wildcard *.cpp */*.cpp */*/*.cpp)
 OBJ := $(SRC:.cpp=.o)

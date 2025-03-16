@@ -5,9 +5,9 @@
 
 int main()
 {
-    Game game = Game(800, 600);
-    Drawer drawer(game.renderer);
-    drawer.drawLine(0, 0, 100, 100, RGB(255, 0, 0));
+    Game game = Game(500, 500);
+    Drawer drawer(&game);
+    drawer.drawLine(0, 0, 1920, 1080, RGB(255, 0, 0));
     while (true)
     {
         game.handleEvents();
