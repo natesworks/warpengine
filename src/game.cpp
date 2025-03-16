@@ -1,7 +1,8 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
 #include <string.h>
 
-#include "warpengine.h"
+#include "game.h"
 
 Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
 {
@@ -17,6 +18,10 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     }
 
     gameWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, flags);
+    renderer = SDL_CreateRenderer(gameWindow, -1, 0);
+    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    //SDL_RenderClear(renderer); 
+    //SDL_RenderPresent(renderer);
 }
 
 Game::Game(int w, int h, std::string title, bool borderless)
@@ -32,4 +37,5 @@ Game::Game(std::string title)
     }
 
     gameWindow = SDL_CreateWindow(title.c_str(), 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    renderer = SDL_CreateRenderer(gameWindow, -1, 0);
 }

@@ -1,12 +1,12 @@
 #include <iostream>
 
-#include "src/warpengine.h"
+#include "src/game.h"
 
 int main()
 {
     try
     {
-        Game game(800, 600, "Game", true);
+        Game game(800, 600, "Game");
     }
     catch (InitialisationFailed)
     {
