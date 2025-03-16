@@ -28,7 +28,7 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     {
         throw RendererCreationFailed();
     }
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
 }
@@ -56,7 +56,7 @@ Game::Game(int w, int h, std::string title, bool borderless)
     {
         throw RendererCreationFailed();
     }
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
 }
@@ -78,7 +78,7 @@ Game::Game(std::string title)
     {
         throw RendererCreationFailed();
     }
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
 }
