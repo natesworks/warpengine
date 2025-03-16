@@ -2,7 +2,7 @@
 #include <SDL2/SDL_render.h>
 #include <string.h>
 
-#include "game.h"
+#include "Game.h"
 
 Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
 {
@@ -18,7 +18,15 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     }
 
     gameWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, flags);
+    if (!gameWindow)
+    {
+        throw WindowCreationFailed();
+    }
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
+    if (!renderer)
+    {
+        throw RendererCreationFailed();
+    }
     //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     //SDL_RenderClear(renderer); 
     //SDL_RenderPresent(renderer);
@@ -38,4 +46,18 @@ Game::Game(std::string title)
 
     gameWindow = SDL_CreateWindow(title.c_str(), 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
+    if (!gameWindow)
+    {
+        throw WindowCreationFailed();
+    }
+    renderer = SDL_CreateRenderer(gameWindow, -1, 0);
+    if (!renderer)
+    {
+        throw RendererCreationFailed();
+    }
+}
+
+Game::~Game()
+{
+
 }
