@@ -19,6 +19,7 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     }
 
     gameWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, flags);
+    SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     if (!gameWindow)
     {
         throw WindowCreationFailed();
@@ -33,33 +34,7 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     SDL_RenderPresent(renderer);
 }
 
-Game::Game(int w, int h, std::string title, bool borderless)
-{
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        throw InitialisationFailed();
-    }
-
-    uint32_t flags = 0;
-    if (borderless)
-    {
-        flags = SDL_WINDOW_BORDERLESS;
-    }
-
-    gameWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags);
-    if (!gameWindow)
-    {
-        throw WindowCreationFailed();
-    }
-    renderer = SDL_CreateRenderer(gameWindow, -1, 0);
-    if (!renderer)
-    {
-        throw RendererCreationFailed();
-    }
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
-}
+Game::Game(int w, int h, std::string title, bool borderless) : Game(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, title, borderless) {}
 
 Game::Game(std::string title)
 {
