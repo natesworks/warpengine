@@ -7,7 +7,7 @@ int main()
 {
     Game game = Game(500, 500);
     Drawer drawer(&game);
-    drawer.drawLine(0, 1000, 500, 1000, RGB(255, 0, 0));
+    drawer.drawLine(Point(0, 0), Point(1000, 1000), RGB(255, 0, 0));
     while (true)
     {
         game.handleEvents();
