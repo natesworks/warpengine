@@ -20,3 +20,4 @@ private:
 class InitialisationFailed {};
 class WindowCreationFailed {};
 class RendererCreationFailed {};
+class RenderFailure {};

@@ -30,7 +30,10 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
         throw RendererCreationFailed();
     }
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderClear(renderer);
+    if (!SDL_RenderClear(renderer))
+    {
+        throw RenderFailure();
+    }
     SDL_RenderPresent(renderer);
 }
 
