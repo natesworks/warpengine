@@ -27,15 +27,13 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     {
         throw RendererCreationFailed();
     }
-    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    //SDL_RenderClear(renderer); 
-    //SDL_RenderPresent(renderer);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
 }
 
 Game::Game(int w, int h, std::string title, bool borderless)
-{
-    Game(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, title, borderless);
-}
+    : Game(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, title, borderless) {}
 
 Game::Game(std::string title)
 {
@@ -45,7 +43,6 @@ Game::Game(std::string title)
     }
 
     gameWindow = SDL_CreateWindow(title.c_str(), 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
-    renderer = SDL_CreateRenderer(gameWindow, -1, 0);
     if (!gameWindow)
     {
         throw WindowCreationFailed();
@@ -55,12 +52,16 @@ Game::Game(std::string title)
     {
         throw RendererCreationFailed();
     }
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
 }
 
 Game::~Game()
 {
     SDL_DestroyWindow(gameWindow);
     SDL_DestroyRenderer(renderer);
+    SDL_Quit();
 }
 
 void Game::handleEvents()
@@ -69,10 +70,10 @@ void Game::handleEvents()
     SDL_PollEvent(&event);
     switch (event.type)
     {
-        case (SDL_QUIT):
-        {
-            exit(0);
-            break;
-        }
+    case (SDL_QUIT):
+    {
+        exit(0);
+        break;
+    }
     }
 }
