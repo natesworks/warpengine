@@ -19,19 +19,23 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     }
 
     gameWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, flags);
-    SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     if (!gameWindow)
     {
         throw WindowCreationFailed();
     }
+    // SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
+
     if (!renderer)
     {
+        std::cerr << "Renderer creation failed: " << SDL_GetError() << std::endl;
         throw RendererCreationFailed();
     }
+
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    if (!SDL_RenderClear(renderer))
+    if (SDL_RenderClear(renderer) != 0)
     {
+        std::cerr << "Renderering failed: " << SDL_GetError() << std::endl;
         throw RenderFailure();
     }
     SDL_RenderPresent(renderer);
@@ -51,6 +55,7 @@ Game::Game(std::string title)
     {
         throw WindowCreationFailed();
     }
+    // SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
     if (!renderer)
     {
