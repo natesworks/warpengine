@@ -26,8 +26,8 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     }
     originalWidth = w;
     originalHeight = h;
-    scaleX = w / 1920.0f ;
-    scaleY = w / 1080.0f;
+    scaleX = w / 1001.0f ;
+    scaleY = w / 1001.0f;
     SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
 
@@ -107,6 +107,7 @@ void Game::handleEvents()
     case SDL_WINDOWEVENT:
         if (event.window.event == SDL_WINDOWEVENT_RESIZED)
         {
+            std::cout << "[DEBUG] Window has been resized.";
             int newWidth, newHeight;
             SDL_GetWindowSize(gameWindow, &newWidth, &newHeight);
 
