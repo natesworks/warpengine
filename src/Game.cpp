@@ -66,8 +66,8 @@ Game::Game(std::string title)
     }
     originalWidth = displayMode.w;
     originalHeight = displayMode.h;
-    scaleX = 1920.0f / displayMode.w;
-    scaleY = 1080.0f / displayMode.h;
+    scaleX = displayMode.w / 1920.0f;
+    scaleY = displayMode.h / 1080.0f;
     SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
     if (!renderer)
