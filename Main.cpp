@@ -6,8 +6,10 @@
 int main()
 {
     Game game = Game(500, 500);
-    Drawer drawer(&game);
-    drawer.drawLine(Point(0, 0), Point(1000, 1000), RGB(255, 0, 0));
+    game.addObject(Object(&game, Vector2(0, 0), Vector2(100, 100), Vector2(0, 0), RGB(0, 0, 255)));
+    Object& object = game.getObject(0);
+    object.addComponent()
+
     while (true)
     {
         game.handleEvents();

@@ -2,17 +2,10 @@
 #include <iostream>
 
 #include "Drawer.h"
-#include "../Point.h"
-#include "../Objects/Line.h"
+#include "../Types/Point.h"
 
 void Drawer::drawLine(Point start, Point end, RGB color)
 {
-    if (!game)
-    {
-        std::cerr << "Game is not initialized!\n";
-        return;
-    }
-
     /*std::cout << "[DEBUG] ScaleX: " << game->scaleX << "\n";
     std::cout << "[DEBUG] ScaleY " << game->scaleY << "\n";
     std::cout << "[DEBUG] Line Start: {" << start.x << ", " << start.y << "}\n";
@@ -23,6 +16,14 @@ void Drawer::drawLine(Point start, Point end, RGB color)
     SDL_RenderDrawLine(game->renderer, start.x * game->scaleX, start.y * game->scaleY, end.x * game->scaleX, end.y * game->scaleY);
     SDL_RenderPresent(game->renderer);
 
-    std::unique_ptr<Line> line = std::make_unique<Line>(start, end, color);
-    game->objects.push_back(std::move(line));
+    //std::unique_ptr<Line> line = std::make_unique<Line>(start, end, color);
+    //game->objects.push_back(std::move(line));
+}
+
+void Drawer::drawRectangle(Point start, Point end, RGB color)
+{
+    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+    SDL_Rect rect = {static_cast<int>(start.x * game->scaleX), static_cast<int>(start.y * game->scaleY), static_cast<int>((end.x - start.x) * game->scaleX), static_cast<int>((end.y - start.y) * game->scaleY)};
+    SDL_RenderFillRect(game->renderer, &rect);
+    SDL_RenderPresent(game->renderer);
 }

@@ -4,8 +4,13 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 #include <string>
+#include <memory>
 
-#include "Objects/Object.h"
+#include "Types/Object.h"
+#include "Rendering/Drawer.h"
+
+class Object;
+class Drawer;
 
 class Game
 {
@@ -14,6 +19,7 @@ public:
     float scaleX;
     float scaleY;
     std::vector<std::unique_ptr<Object>> objects;
+    std::unique_ptr<Drawer> drawer;
 
     Game(int x, int y, int w, int h, std::string title = "Game", bool borderless = false);
     Game(int w, int h, std::string title = "Game", bool borderless = false);
@@ -21,6 +27,8 @@ public:
     ~Game();
 
     void handleEvents();
+    void addObject(Object);
+    Object& getObject(int index);
 
 private:
     SDL_Window *gameWindow = nullptr;

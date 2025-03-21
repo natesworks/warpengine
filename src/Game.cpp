@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Game.h"
+#include "Rendering/Drawer.h"
 
 Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
 {
@@ -19,6 +20,7 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
         flags = SDL_WINDOW_BORDERLESS;
     }
 
+    drawer = std::make_unique<Drawer>(this);
     gameWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, flags);
     if (!gameWindow)
     {
@@ -54,6 +56,7 @@ Game::Game(std::string title)
         throw InitialisationFailed();
     }
 
+    drawer = std::make_unique<Drawer>(this);
     gameWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
     if (!gameWindow)
     {
@@ -120,4 +123,14 @@ void Game::handleEvents()
             break;
         }
     }
+}
+
+void Game::addObject(Object object)
+{
+    objects.push_back(std::make_unique<Object>(std::move(object)));
+}
+
+Object& Game::getObject(int index)
+{
+    return *objects.at(index);
 }
