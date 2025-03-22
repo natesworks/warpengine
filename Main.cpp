@@ -2,9 +2,7 @@
 #include <thread>
 
 #include "src/Game.h"
-#include "src/Components/Rectangle.h"
 #include "src/Components/FilledRectangle.h"
-#include "src/Components/Ellipse.h"
 #include "src/Components/FilledEllipse.h"
 
 int main()
@@ -28,6 +26,20 @@ int main()
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     object->position = Vector2(250, 250);
     game.drawer->drawAll();
+
+    game.setEventHandler(EventType::MOUSEBUTTONDOWN, [&game, &object, &object2](Event e) 
+    {
+        int randomX1 = rand() % game.getWindowWidth();
+        int randomY1 = rand() % game.getWindowHeight();
+        object->position = Vector2(randomX1, randomY1);
+
+        int randomX2 = rand() % game.getWindowWidth();
+        int randomY2 = rand() % game.getWindowHeight();
+        object2->position = Vector2(randomX2, randomY2);
+
+        game.drawer->drawAll();
+
+    });
     while (true) {}
 
     return 0;

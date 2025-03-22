@@ -6,6 +6,7 @@
 
 #include "Game.h"
 #include "Rendering/Drawer.h"
+#include "Enums/Keys.h"
 
 Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
 {
@@ -28,7 +29,9 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     }
     originalWidth = w;
     originalHeight = h;
-    scaleX = w / 1000.1f ;
+    width = w;
+    height = h;
+    scaleX = w / 1000.1f;
     scaleY = w / 1000.1f;
     SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
@@ -104,27 +107,89 @@ void Game::handleEvents()
     {
         SDL_Event event;
         SDL_WaitEvent(&event);
-        switch (event.type)
+        if (event.type == SDL_QUIT)
         {
-        case SDL_QUIT:
             exit(0);
-            break;
-        case SDL_WINDOWEVENT:
+        }
+        else if (event.type == SDL_WINDOWEVENT)
+        {
             if (event.window.event == SDL_WINDOWEVENT_RESIZED)
             {
-                std::cout << "[DEBUG] Window has been resized\n";
-                int newWidth, newHeight;
-                SDL_GetWindowSize(gameWindow, &newWidth, &newHeight);
-    
-                SDL_Rect newViewport = {0, 0, newWidth, newHeight};
+                SDL_GetWindowSize(gameWindow, &width, &height);
+
+                SDL_Rect newViewport = {0, 0, width, height};
                 SDL_RenderSetViewport(renderer, &newViewport);
-    
-                scaleX = (float)newWidth / originalWidth;
-                scaleY = (float)newHeight / originalHeight;
+
+                scaleX = (float)width / originalWidth;
+                scaleY = (float)height / originalHeight;
+
+
 
                 drawer->drawAll();
-                
-                break;
+            }
+        }
+        else if (event.type == SDL_KEYDOWN)
+        {
+            uint32_t key = event.key.keysym.sym;
+            if (eventHandlers.find(KEYDOWN) != eventHandlers.end())
+            {
+                Event e;
+                e.type = EventType::KEYDOWN;
+                e.key = key;
+                eventHandlers[KEYDOWN](e);
+            }
+        }
+        else if (event.type == SDL_KEYUP)
+        {
+            uint32_t key = event.key.keysym.sym;
+            if (eventHandlers.find(KEYUP) != eventHandlers.end())
+            {
+                Event e;
+                e.type = EventType::KEYUP;
+                e.key = key;
+                eventHandlers[KEYUP](e);
+            }
+        }
+        else if (event.type == SDL_MOUSEBUTTONDOWN)
+        {
+            if (eventHandlers.find(MOUSEBUTTONDOWN) != eventHandlers.end())
+            {
+                Event e;
+                e.type = EventType::MOUSEBUTTONDOWN;
+                e.mouseButton = event.button.button;
+                eventHandlers[MOUSEBUTTONDOWN](e);
+            }
+        }
+        else if (event.type == SDL_MOUSEBUTTONUP)
+        {
+            if (eventHandlers.find(MOUSEBUTTONUP) != eventHandlers.end())
+            {
+                Event e;
+                e.type = EventType::MOUSEBUTTONUP;
+                e.mouseButton = event.button.button;
+                eventHandlers[MOUSEBUTTONUP](e);
+            }
+        }
+        else if (event.type == SDL_MOUSEMOTION)
+        {
+            if (eventHandlers.find(MOUSEMOTION) != eventHandlers.end())
+            {
+                Event e;
+                e.type = EventType::MOUSEMOTION;
+                e.mousePosition.x = event.motion.x;
+                e.mousePosition.y = event.motion.y;
+                eventHandlers[MOUSEMOTION](e);
+            }
+        }
+        else if (event.type == SDL_MOUSEWHEEL)
+        {
+            if (eventHandlers.find(MOUSEWHEEL) != eventHandlers.end())
+            {
+                Event e;
+                e.type = EventType::MOUSEWHEEL;
+                e.mouseWheel.x = event.wheel.x;
+                e.mouseWheel.y = event.wheel.y;
+                eventHandlers[MOUSEWHEEL](e);
             }
         }
     }
@@ -135,7 +200,22 @@ void Game::addObject(Object object)
     objects.push_back(std::make_unique<Object>(std::move(object)));
 }
 
-Object* Game::getObject(int index)
+Object *Game::getObject(int index)
 {
     return objects.at(index).get();
+}
+
+void Game::setEventHandler(EventType eventType, std::function<void (Event &)> handler)
+{
+    eventHandlers[eventType] = handler;
+}
+
+int Game::getWindowWidth()
+{
+    return width;
+}
+
+int Game::getWindowHeight()
+{
+    return height;
 }

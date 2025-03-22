@@ -5,9 +5,12 @@
 #include <SDL2/SDL_video.h>
 #include <string>
 #include <memory>
+#include <unordered_map>
+#include <functional>
 
 #include "Types/Object.h"
 #include "Rendering/Drawer.h"
+#include "Types/Event.h"
 
 class Object;
 class Drawer;
@@ -26,14 +29,22 @@ public:
     Game(std::string title = "Game");
     ~Game();
 
-    void handleEvents();
     void addObject(Object);
     Object* getObject(int index);
 
+    void handleEvents();
+    void setEventHandler(EventType eventType, std::function<void(Event& event)> handler);
+    
+    int getWindowWidth();
+    int getWindowHeight();
+
 private:
+    std::unordered_map<EventType, std::function<void(Event& event)>> eventHandlers;
     SDL_Window *gameWindow = nullptr;
     int originalWidth;
     int originalHeight;
+    int width;
+    int height;
 };
 
 class InitialisationFailed {};

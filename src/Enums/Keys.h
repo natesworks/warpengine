@@ -1,5 +1,7 @@
 // SDL_events.h
-// To get keycode from scancode do scancode | 1<<30
+// To get keycode from scancode do: x | 1<<30 where x is scancode
+
+#pragma once
 
 typedef enum
 {
@@ -10,9 +12,9 @@ typedef enum
     KEY_BACKSPACE = '\b',
     KEY_TAB = '\t',
     KEY_SPACE = ' ',
-    KEY_EXCLAIM = '!',
+    KEY_EXCLAMATION_MARK = '!',
     KEY_QUOTEDBL = '"',
-    KEY_HASH = '#',
+    KEY_HASHTAG = '#',
     KEY_PERCENT = '%',
     KEY_DOLLAR = '$',
     KEY_AMPERSAND = '&',
@@ -24,7 +26,7 @@ typedef enum
     KEY_COMMA = ',',
     KEY_MINUS = '-',
     KEY_PERIOD = '.',
-    KEY_SLASH = '/',
+    KEY_FORWARDSLASH = '/',
     KEY_0 = '0',
     KEY_1 = '1',
     KEY_2 = '2',
