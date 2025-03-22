@@ -100,27 +100,30 @@ Game::~Game()
 
 void Game::handleEvents()
 {
-    SDL_Event event;
-    SDL_WaitEvent(&event);
-    switch (event.type)
+    while (true)
     {
-    case SDL_QUIT:
-        exit(0);
-        break;
-    case SDL_WINDOWEVENT:
-        if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+        SDL_Event event;
+        SDL_WaitEvent(&event);
+        switch (event.type)
         {
-            std::cout << "[DEBUG] Window has been resized\n";
-            int newWidth, newHeight;
-            SDL_GetWindowSize(gameWindow, &newWidth, &newHeight);
-
-            SDL_Rect newViewport = {0, 0, newWidth, newHeight};
-            SDL_RenderSetViewport(renderer, &newViewport);
-
-            scaleX = (float)newWidth / originalWidth;
-            scaleY = (float)newHeight / originalHeight;
-
+        case SDL_QUIT:
+            exit(0);
             break;
+        case SDL_WINDOWEVENT:
+            if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+            {
+                std::cout << "[DEBUG] Window has been resized\n";
+                int newWidth, newHeight;
+                SDL_GetWindowSize(gameWindow, &newWidth, &newHeight);
+    
+                SDL_Rect newViewport = {0, 0, newWidth, newHeight};
+                SDL_RenderSetViewport(renderer, &newViewport);
+    
+                scaleX = (float)newWidth / originalWidth;
+                scaleY = (float)newHeight / originalHeight;
+    
+                break;
+            }
         }
     }
 }
