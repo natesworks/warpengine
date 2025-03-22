@@ -55,11 +55,14 @@ void Drawer::drawEllipse(Point center, int radiusX, int radiusY, RGB color)
 void Drawer::drawFilledEllipse(Point center, int radiusX, int radiusY, RGB color)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
-    for (int i = 0; i < 360; i++)
+    for (int y = -radiusY; y <= radiusY; y++)
     {
-        double angle = i * M_PI / 180;
-        int x = center.x + radiusX * cos(angle) * game->scaleX;
-        int y = center.y + radiusY * sin(angle) * game->scaleY;
-        SDL_RenderDrawPoint(game->renderer, x, y);
+        for (int x = -radiusX; x <= radiusX; x++)
+        {
+            if ((x * x * radiusY * radiusY + y * y * radiusX * radiusX) <= (radiusX * radiusX * radiusY * radiusY))
+            {
+                SDL_RenderDrawPoint(game->renderer, center.x + x * game->scaleX, center.y + y * game->scaleY);
+            }
+        }
     }
 }
