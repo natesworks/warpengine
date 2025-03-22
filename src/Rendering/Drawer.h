@@ -12,10 +12,12 @@ class Drawer
 {
 public:
     Drawer(Game *game) : game(game) {};
+    void drawAll();
     void drawLine(Point start, Point end, RGB color);
     void drawRectangle(Point start, Point end, RGB color);
-    //void drawCircle(Point center, int radius, RGB color);
-    void redrawAll();
+    void drawFilledRectangle(Point start, Point end, RGB color);
+    void drawEllipse(Point center, int radiusX, int radiusY, RGB color);
+    void drawFilledEllipse(Point center, int x, int y, RGB color);
 
 private:
     Game *game;

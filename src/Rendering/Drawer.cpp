@@ -4,33 +4,9 @@
 #include "Drawer.h"
 #include "../Types/Point.h"
 
-void Drawer::drawLine(Point start, Point end, RGB color)
+void Drawer::drawAll()
 {
-    /*std::cout << "[DEBUG] ScaleX: " << game->scaleX << "\n";
-    std::cout << "[DEBUG] ScaleY " << game->scaleY << "\n";
-    std::cout << "[DEBUG] Line Start: {" << start.x << ", " << start.y << "}\n";
-    std::cout << "[DEBUG] Line End: {" << end.x << ", " << end.y << "}\n";
-    std::cout << "[DEBUG] Line Color: {" << color.r << ", " << color.g << ", " << color.b << "}\n";*/
-
-    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
-    SDL_RenderDrawLine(game->renderer, start.x * game->scaleX, start.y * game->scaleY, end.x * game->scaleX, end.y * game->scaleY);
-    SDL_RenderPresent(game->renderer);
-
-    //std::unique_ptr<Line> line = std::make_unique<Line>(start, end, color);
-    //game->objects.push_back(std::move(line));
-}
-
-void Drawer::drawRectangle(Point start, Point end, RGB color)
-{
-    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
-    SDL_Rect rect = {static_cast<int>(start.x * game->scaleX), static_cast<int>(start.y * game->scaleY), static_cast<int>((end.x - start.x) * game->scaleX), static_cast<int>((end.y - start.y) * game->scaleY)};
-    SDL_RenderFillRect(game->renderer, &rect);
-    SDL_RenderPresent(game->renderer);
-}
-
-void Drawer::redrawAll()
-{
-    SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
     SDL_RenderClear(game->renderer);
 
     for (auto &object : game->objects)
@@ -42,4 +18,48 @@ void Drawer::redrawAll()
     }
 
     SDL_RenderPresent(game->renderer);
+}
+
+void Drawer::drawLine(Point start, Point end, RGB color)
+{
+    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+    SDL_RenderDrawLine(game->renderer, start.x * game->scaleX, start.y * game->scaleY, end.x * game->scaleX, end.y * game->scaleY);
+}
+
+void Drawer::drawRectangle(Point start, Point end, RGB color)
+{
+    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+    SDL_Rect rect = {static_cast<int>(start.x * game->scaleX), static_cast<int>(start.y * game->scaleY), static_cast<int>((end.x - start.x) * game->scaleX), static_cast<int>((end.y - start.y) * game->scaleY)};
+    SDL_RenderDrawRect(game->renderer, &rect);
+}
+
+void Drawer::drawFilledRectangle(Point start, Point end, RGB color)
+{
+    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+    SDL_Rect rect = {static_cast<int>(start.x * game->scaleX), static_cast<int>(start.y * game->scaleY), static_cast<int>((end.x - start.x) * game->scaleX), static_cast<int>((end.y - start.y) * game->scaleY)};
+    SDL_RenderFillRect(game->renderer, &rect);
+}
+
+void Drawer::drawEllipse(Point center, int radiusX, int radiusY, RGB color)
+{
+    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+    for (int i = 0; i < 360; i++)
+    {
+        double angle = i * M_PI / 180;
+        int x = center.x + radiusX * cos(angle) * game->scaleX;
+        int y = center.y + radiusY * sin(angle) * game->scaleY;
+        SDL_RenderDrawPoint(game->renderer, x, y);
+    }
+}
+
+void Drawer::drawFilledEllipse(Point center, int radiusX, int radiusY, RGB color)
+{
+    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+    for (int i = 0; i < 360; i++)
+    {
+        double angle = i * M_PI / 180;
+        int x = center.x + radiusX * cos(angle) * game->scaleX;
+        int y = center.y + radiusY * sin(angle) * game->scaleY;
+        SDL_RenderDrawPoint(game->renderer, x, y);
+    }
 }

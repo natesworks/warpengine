@@ -121,7 +121,9 @@ void Game::handleEvents()
     
                 scaleX = (float)newWidth / originalWidth;
                 scaleY = (float)newHeight / originalHeight;
-    
+
+                drawer->redrawAll();
+                
                 break;
             }
         }
