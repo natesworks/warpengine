@@ -28,7 +28,7 @@ public:
 
     void handleEvents();
     void addObject(Object);
-    Object& getObject(int index);
+    Object* getObject(int index);
 
 private:
     SDL_Window *gameWindow = nullptr;

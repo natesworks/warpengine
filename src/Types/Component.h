@@ -3,10 +3,6 @@
 #include <vector>
 #include <memory>
 
-#include "Object.h"
-
-class Object;
-
 class Component
 {
 public:

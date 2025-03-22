@@ -8,7 +8,6 @@
 #include "../Types/Component.h"
 #include "../Types/RGB.h"
 
-class Component;
 class Game;
 
 class Object

@@ -130,7 +130,7 @@ void Game::addObject(Object object)
     objects.push_back(std::make_unique<Object>(std::move(object)));
 }
 
-Object& Game::getObject(int index)
+Object* Game::getObject(int index)
 {
-    return *objects.at(index);
+    return objects.at(index).get();
 }
