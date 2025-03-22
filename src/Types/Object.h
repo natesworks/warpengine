@@ -3,9 +3,9 @@
 #include <vector>
 #include <memory>
 
+#include "../Types/Component.h"
 #include "Vector2.h"
 #include "../Game.h"
-#include "../Types/Component.h"
 #include "../Types/RGB.h"
 
 class Game;
@@ -30,5 +30,6 @@ public:
         return *components.at(index);
     }
 
-    Object(Game* game, Vector2 position, Vector2 scale, Vector2 rotation, RGB color) : game(game), position(position), scale(scale), rotation(rotation), color(color) {};
+    Object(Game* game, Vector2 position, Vector2 scale, Vector2 rotation, RGB color) 
+        : game(game), position(position), scale(scale), rotation(rotation), color(color) {}
 };

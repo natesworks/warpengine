@@ -15,6 +15,7 @@ public:
     void drawLine(Point start, Point end, RGB color);
     void drawRectangle(Point start, Point end, RGB color);
     //void drawCircle(Point center, int radius, RGB color);
+    void redrawAll();
 
 private:
     Game *game;

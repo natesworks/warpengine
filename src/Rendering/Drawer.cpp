@@ -27,3 +27,19 @@ void Drawer::drawRectangle(Point start, Point end, RGB color)
     SDL_RenderFillRect(game->renderer, &rect);
     SDL_RenderPresent(game->renderer);
 }
+
+void Drawer::redrawAll()
+{
+    SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
+    SDL_RenderClear(game->renderer);
+
+    for (auto &object : game->objects)
+    {
+        for (auto &component : object->components)
+        {
+            component->draw(object.get());
+        }
+    }
+
+    SDL_RenderPresent(game->renderer);
+}

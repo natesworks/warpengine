@@ -15,6 +15,9 @@ int main()
     std::thread eventHandlerThread(&Game::handleEvents, &game);
     eventHandlerThread.detach();
 
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    object->position = Vector2(250, 250);
+    game.drawer->redrawAll();
     while (true) {}
 
     return 0;
