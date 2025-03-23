@@ -13,7 +13,7 @@ void onClick(Game& game, Object& object)
 {
     int randomX = rand() % game.getWindowWidth();
     int randomY = rand() % game.getWindowHeight();
-    object.position = Vector2(randomX, randomY);
+    object.setPosition(Vector2(randomX, randomY));
 }
 
 int main()

@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "Drawer.h"
-#include "../Types/Point.h"
+#include "../Types/Vector2.h"
 
 void Drawer::drawAll()
 {
@@ -21,7 +21,7 @@ void Drawer::drawAll()
     SDL_RenderPresent(game->renderer);
 }
 
-void Drawer::drawLine(Point start, Point end, RGB color, float rotation)
+void Drawer::drawLine(Vector2 start, Vector2 end, RGB color, float rotation)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
 
@@ -46,14 +46,14 @@ void Drawer::drawLine(Point start, Point end, RGB color, float rotation)
     SDL_RenderDrawLine(game->renderer, rotatedStartX * game->scaleX, rotatedStartY * game->scaleY, rotatedEndX * game->scaleX, rotatedEndY * game->scaleY);
 }
 
-void Drawer::drawRectangle(Point start, Point end, RGB color, float rotation)
+void Drawer::drawRectangle(Vector2 start, Vector2 end, RGB color, float rotation)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
 
     float centerX = (start.x + end.x) / 2.0f;
     float centerY = (start.y + end.y) / 2.0f;
 
-    Point corners[4] = {
+    Vector2 corners[4] = {
         {start.x, start.y},
         {end.x, start.y},
         {end.x, end.y},
@@ -78,14 +78,14 @@ void Drawer::drawRectangle(Point start, Point end, RGB color, float rotation)
     SDL_RenderDrawLine(game->renderer, corners[3].x * game->scaleX, corners[3].y * game->scaleY, corners[0].x * game->scaleX, corners[0].y * game->scaleY);
 }
 
-void Drawer::drawFilledRectangle(Point start, Point end, RGB color, float rotation)
+void Drawer::drawFilledRectangle(Vector2 start, Vector2 end, RGB color, float rotation)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
 
     float centerX = (start.x + end.x) / 2.0f;
     float centerY = (start.y + end.y) / 2.0f;
 
-    Point corners[4] = 
+    Vector2 corners[4] = 
     {
         {start.x, start.y},
         {end.x, start.y},
@@ -117,7 +117,7 @@ void Drawer::drawFilledRectangle(Point start, Point end, RGB color, float rotati
     SDL_RenderGeometry(game->renderer, nullptr, verts, 4, indices, 6);
 }
 
-void Drawer::drawEllipse(Point center, float radiusX, float radiusY, RGB color, float rotation)
+void Drawer::drawEllipse(Vector2 center, float radiusX, float radiusY, RGB color, float rotation)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
     for (int i = 0; i < 360; i++)
@@ -136,7 +136,7 @@ void Drawer::drawEllipse(Point center, float radiusX, float radiusY, RGB color, 
     }
 }
 
-void Drawer::drawFilledEllipse(Point center, int radiusX, int radiusY, RGB color, float rotation)
+void Drawer::drawFilledEllipse(Vector2 center, int radiusX, int radiusY, RGB color, float rotation)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
     for (int y = -radiusY; y <= radiusY; y++)

@@ -35,3 +35,33 @@ bool Object::isMouseOver(Vector2 mousePosition)
 
     return isMouseOver;
 }
+
+void Object::setPosition(Vector2 position)
+{
+    this->position = position;
+}
+
+void Object::setScale(Vector2 scale)
+{
+    this->scale = scale;
+}
+
+void Object::setRotation(float rotation)
+{
+    this->rotation = rotation;
+}
+
+Vector2 Object::getPosition()
+{
+    return position;
+}
+
+Vector2 Object::getScale()
+{
+    return scale;
+}
+
+float Object::getRotation()
+{
+    return rotation;
+}

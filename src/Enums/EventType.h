@@ -7,5 +7,6 @@ typedef enum
     MOUSEBUTTONDOWN = 2,
     MOUSEBUTTONUP = 3,
     MOUSEMOTION = 4,
-    MOUSEWHEEL = 5
+    MOUSEWHEEL = 5,
+    ENTEROBJECT = 6
 } EventType;
