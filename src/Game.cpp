@@ -140,6 +140,10 @@ void Game::handleEvents()
                     component->onEvent(e);
                 }
             }
+            if (togglableFullscreen && e.key == SDLK_F11)
+            {
+                SDL_SetWindowFullscreen(gameWindow, SDL_GetWindowFlags(gameWindow) ^ SDL_WINDOW_FULLSCREEN_DESKTOP);
+            }
         }
         else if (event.type == SDL_KEYUP)
         {

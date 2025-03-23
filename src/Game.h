@@ -39,6 +39,8 @@ public:
     int getWindowWidth();
     int getWindowHeight();
 
+    bool togglableFullscreen = true;
+
 private:
     std::unordered_map<EventType, std::vector<std::function<void(Event& event)>>> eventHandlers;
     SDL_Window *gameWindow = nullptr;

@@ -18,7 +18,7 @@ void onClick(Game& game, Object& object)
 
 int main()
 {
-    Game game = Game("Portal 3");
+    Game game = Game(960, 540, "Portal 3");
     game.addObject(Object(&game, Vector2(0, 0), Vector2(100, 100), 25, RGB(0, 0, 255)));
     Object* object = game.getObject(0);
     FilledRectangle rectangle(object);
