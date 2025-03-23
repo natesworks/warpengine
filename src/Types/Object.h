@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <cmath>
 
 #include "../Types/Component.h"
 #include "Vector2.h"
@@ -21,29 +22,11 @@ public:
     RGB color;
     Game *game;
 
-    void addComponent(const Component& component)
-    {
-        components.push_back(component.clone());
-    }
+    void addComponent(const Component& component);
 
-    Component& getComponent(int index)
-    {
-        return *components.at(index);
-    }
+    Component& getComponent(int index);
 
-    bool isMouseOver(Vector2 mousePosition)
-    {
-        Vector2 localMousePosition = mousePosition - position;
-
-        float cosTheta = cos(-rotation);
-        float sinTheta = sin(-rotation);
-        float localX = localMousePosition.x * cosTheta - localMousePosition.y * sinTheta;
-        float localY = localMousePosition.x * sinTheta + localMousePosition.y * cosTheta;
-
-        bool isMouseOver = localX >= 0 && localX <= scale.x && localY >= 0 && localY <= scale.y;
-
-        return isMouseOver;
-    }
+    bool isMouseOver(Vector2 mousePosition);
 
     Object(Game* game, Vector2 position, Vector2 scale, float rotation, RGB color) 
         : game(game), position(position), scale(scale), rotation(rotation), color(color) {}

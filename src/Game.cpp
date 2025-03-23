@@ -7,7 +7,6 @@
 
 #include "Game.h"
 #include "Rendering/Drawer.h"
-#include "Enums/Keys.h"
 #include "Types/Component.h"
 
 Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
@@ -181,7 +180,7 @@ void Game::handleEvents()
             }
             for (const std::unique_ptr<Object> &object : objects)
             {
-                if (object->isMouseOver(e.mousePosition))
+                if (object->isMouseOver(e.mousePosition) == true)
                 {
                     for (std::unique_ptr<Component> &component : object->components)
                     {
@@ -190,7 +189,7 @@ void Game::handleEvents()
                 }
             }
         }
-        else if (event.type == SDL_MOUSEBUTTONUP)
+        else if (event.type == SDL_MOUSEBUTTONUP && false)
         {
             if (eventHandlers.find(MOUSEBUTTONUP) != eventHandlers.end())
             {
@@ -214,7 +213,7 @@ void Game::handleEvents()
                 }
             }
         }
-        else if (event.type == SDL_MOUSEMOTION)
+        else if (event.type == SDL_MOUSEMOTION && false)
         {
             Event e;
             e.type = EventType::MOUSEMOTION;
@@ -229,7 +228,7 @@ void Game::handleEvents()
             }
             for (const std::unique_ptr<Object> &object : objects)
             {
-                if (object->isMouseOver(e.mousePosition))
+                if (object->isMouseOver(e.mousePosition) == true)
                 {
                     for (std::unique_ptr<Component> &component : object->components)
                     {
@@ -238,7 +237,7 @@ void Game::handleEvents()
                 }
             }
         }
-        else if (event.type == SDL_MOUSEWHEEL)
+        else if (event.type == SDL_MOUSEWHEEL && false)
         {
             Event e;
             e.type = EventType::MOUSEWHEEL;
@@ -253,7 +252,7 @@ void Game::handleEvents()
             }
             for (const std::unique_ptr<Object> &object : objects)
             {
-                if (object->isMouseOver(e.mousePosition))
+                if (object->isMouseOver(e.mousePosition) == true)
                 {
                     for (std::unique_ptr<Component> &component : object->components)
                     {
