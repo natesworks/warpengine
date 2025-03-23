@@ -3,6 +3,7 @@
 #include <SDL2/SDL_video.h>
 #include <string.h>
 #include <iostream>
+#include <thread>
 
 #include "Game.h"
 #include "Rendering/Drawer.h"
@@ -208,6 +209,23 @@ Object *Game::getObject(int index)
 void Game::setEventHandler(EventType eventType, std::function<void (Event &)> handler)
 {
     eventHandlers[eventType] = handler;
+}
+
+void Game::gameLoop()
+{
+    while (true)
+    {
+        drawer->drawAll();
+    }
+}
+
+void Game::start()
+{
+    std::thread eventHandlerThread(&Game::handleEvents, this);
+    eventHandlerThread.detach();
+
+    std::thread gameLoopThread(&Game::gameLoop, this);
+    gameLoopThread.detach();
 }
 
 int Game::getWindowWidth()

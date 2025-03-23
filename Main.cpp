@@ -18,14 +18,11 @@ int main()
     Object* object2 = game.getObject(1);
     FilledEllipse ellipse(object2);
     object2->addComponent(std::move(ellipse));
-    game.drawer->drawAll();
 
-    std::thread eventHandlerThread(&Game::handleEvents, &game);
-    eventHandlerThread.detach();
+    game.start();
 
     game.setEventHandler(EventType::MOUSEBUTTONDOWN, [&game, &object, &object2](Event e) 
     {
-        std::cout << "click!\n";
         int randomX1 = rand() % game.getWindowWidth();
         int randomY1 = rand() % game.getWindowHeight();
         object->position = Vector2(randomX1, randomY1);
@@ -33,9 +30,6 @@ int main()
         int randomX2 = rand() % game.getWindowWidth();
         int randomY2 = rand() % game.getWindowHeight();
         object2->position = Vector2(randomX2, randomY2);
-
-        game.drawer->drawAll();
-
     });
     while (true) {}
 

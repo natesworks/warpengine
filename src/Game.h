@@ -32,9 +32,9 @@ public:
     void addObject(Object);
     Object* getObject(int index);
 
-    void handleEvents();
     void setEventHandler(EventType eventType, std::function<void(Event& event)> handler);
-    
+    void start();
+
     int getWindowWidth();
     int getWindowHeight();
 
@@ -45,6 +45,9 @@ private:
     int originalHeight;
     int width;
     int height;
+
+    void handleEvents();
+    void gameLoop();
 };
 
 class InitialisationFailed {};
