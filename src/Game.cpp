@@ -140,6 +140,13 @@ void Game::handleEvents()
                 {
                     handler(e);
                 }
+                for (const std::unique_ptr<Object> &object : objects)
+                {
+                    for (std::unique_ptr<Component> &component : object->components)
+                    {
+                        component->onEvent(e);
+                    }
+                }
             }
         }
         else if (event.type == SDL_KEYUP)
@@ -154,6 +161,13 @@ void Game::handleEvents()
                 {
                     handler(e);
                 }
+                for (const std::unique_ptr<Object> &object : objects)
+                {
+                    for (std::unique_ptr<Component> &component : object->components)
+                    {
+                        component->onEvent(e);
+                    }
+                }
             }
         }
         else if (event.type == SDL_MOUSEBUTTONDOWN)
@@ -167,6 +181,16 @@ void Game::handleEvents()
                 {
                     handler(e);
                 }
+                for (const std::unique_ptr<Object> &object : objects)
+                {
+                    if (object->isMouseOver(e.mousePosition))
+                    {
+                        for (std::unique_ptr<Component> &component : object->components)
+                        {
+                            component->onEvent(e);
+                        }
+                    }
+                }
             }
         }
         else if (event.type == SDL_MOUSEBUTTONUP)
@@ -179,6 +203,16 @@ void Game::handleEvents()
                 for (std::function<void(Event & event)> handler : eventHandlers[MOUSEBUTTONUP])
                 {
                     handler(e);
+                }
+                for (const std::unique_ptr<Object> &object : objects)
+                {
+                    if (object->isMouseOver(e.mousePosition))
+                    {
+                        for (std::unique_ptr<Component> &component : object->components)
+                        {
+                            component->onEvent(e);
+                        }
+                    }
                 }
             }
         }
