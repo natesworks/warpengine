@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "Rendering/Drawer.h"
 #include "Enums/Keys.h"
+#include "Types/Component.h"
 
 Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
 {
@@ -124,8 +125,6 @@ void Game::handleEvents()
                 scaleX = (float)width / originalWidth;
                 scaleY = (float)height / originalHeight;
 
-
-
                 drawer->drawAll();
             }
         }
@@ -151,7 +150,7 @@ void Game::handleEvents()
                 Event e;
                 e.type = EventType::KEYUP;
                 e.key = key;
-                for (std::function<void(Event& event)> handler : eventHandlers[KEYUP])
+                for (std::function<void(Event & event)> handler : eventHandlers[KEYUP])
                 {
                     handler(e);
                 }
@@ -164,7 +163,7 @@ void Game::handleEvents()
                 Event e;
                 e.type = EventType::MOUSEBUTTONDOWN;
                 e.mouseButton = event.button.button;
-                for (std::function<void(Event& event)> handler : eventHandlers[MOUSEBUTTONDOWN])
+                for (std::function<void(Event & event)> handler : eventHandlers[MOUSEBUTTONDOWN])
                 {
                     handler(e);
                 }
@@ -177,7 +176,7 @@ void Game::handleEvents()
                 Event e;
                 e.type = EventType::MOUSEBUTTONUP;
                 e.mouseButton = event.button.button;
-                for (std::function<void(Event& event)> handler : eventHandlers[MOUSEBUTTONUP])
+                for (std::function<void(Event & event)> handler : eventHandlers[MOUSEBUTTONUP])
                 {
                     handler(e);
                 }
@@ -191,9 +190,19 @@ void Game::handleEvents()
                 e.type = EventType::MOUSEMOTION;
                 e.mousePosition.x = event.motion.x;
                 e.mousePosition.y = event.motion.y;
-                for (std::function<void(Event& event)> handler : eventHandlers[MOUSEMOTION])
+                for (std::function<void(Event & event)> handler : eventHandlers[MOUSEMOTION])
                 {
                     handler(e);
+                }
+                for (const std::unique_ptr<Object> &object : objects)
+                {
+                    if (object->isMouseOver(e.mousePosition))
+                    {
+                        for (std::unique_ptr<Component> &component : object->components)
+                        {
+                            component->onEvent(e);
+                        }
+                    }
                 }
             }
         }
@@ -205,7 +214,7 @@ void Game::handleEvents()
                 e.type = EventType::MOUSEWHEEL;
                 e.mouseWheel.x = event.wheel.x;
                 e.mouseWheel.y = event.wheel.y;
-                for (std::function<void(Event& event)> handler : eventHandlers[MOUSEWHEEL])
+                for (std::function<void(Event & event)> handler : eventHandlers[MOUSEWHEEL])
                 {
                     handler(e);
                 }
@@ -224,7 +233,7 @@ Object *Game::getObject(int index)
     return objects.at(index).get();
 }
 
-int Game::addEventHandler(EventType eventType, std::function<void (Event &)> handler)
+int Game::addEventHandler(EventType eventType, std::function<void(Event &)> handler)
 {
     eventHandlers[eventType].push_back(handler);
     return eventHandlers[eventType].size() - 1;

@@ -30,6 +30,11 @@ public:
         return *components.at(index);
     }
 
+    bool isMouseOver(Vector2 mousePosition)
+    {
+        return mousePosition.x >= position.x && mousePosition.x <= position.x + scale.x && mousePosition.y >= position.y && mousePosition.y <= position.y + scale.y;
+    }
+
     Object(Game* game, Vector2 position, Vector2 scale, float rotation, RGB color) 
         : game(game), position(position), scale(scale), rotation(rotation), color(color) {}
 };
