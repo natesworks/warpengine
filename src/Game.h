@@ -45,8 +45,8 @@ private:
     int width;
     int height;
 
-    float referenceWidth = 1000.1f;
-    float referenceHeight = 1000.1f;
+    float referenceWidth = 1920.0f;
+    float referenceHeight = 1080.0f;
 
     void handleEvents();
     void gameLoop();
