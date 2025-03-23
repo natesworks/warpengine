@@ -123,19 +123,16 @@ void Drawer::drawEllipse(Point center, float radiusX, float radiusY, RGB color, 
     for (int i = 0; i < 360; i++)
     {
         double angle = i * M_PI / 180;
-        int x = center.x + radiusX * cos(angle) * game->scaleX;
-        int y = center.y + radiusY * sin(angle) * game->scaleY;
+        float x = radiusX * cos(angle);
+        float y = radiusY * sin(angle);
 
-        float translatedX = x - center.x;
-        float translatedY = y - center.y;
+        float translatedX = x * game->scaleX;
+        float translatedY = y * game->scaleY;
 
         float rotatedX = translatedX * cos(rotation) - translatedY * sin(rotation);
         float rotatedY = translatedX * sin(rotation) + translatedY * cos(rotation);
 
-        x = rotatedX + center.x;
-        y = rotatedY + center.y;
-
-        SDL_RenderDrawPoint(game->renderer, x, y);
+        SDL_RenderDrawPoint(game->renderer, center.x * game->scaleX + rotatedX, center.y * game->scaleY + rotatedY);
     }
 }
 
@@ -148,13 +145,13 @@ void Drawer::drawFilledEllipse(Point center, int radiusX, int radiusY, RGB color
         {
             if ((x * x * radiusY * radiusY + y * y * radiusX * radiusX) <= (radiusX * radiusX * radiusY * radiusY))
             {
-                float translatedX = x;
-                float translatedY = y;
+                float translatedX = x * game->scaleX;
+                float translatedY = y * game->scaleY;
 
                 float rotatedX = translatedX * cos(rotation) - translatedY * sin(rotation);
                 float rotatedY = translatedX * sin(rotation) + translatedY * cos(rotation);
 
-                SDL_RenderDrawPoint(game->renderer, center.x + rotatedX * game->scaleX, center.y + rotatedY * game->scaleY);
+                SDL_RenderDrawPoint(game->renderer, center.x * game->scaleX + rotatedX, center.y * game->scaleY + rotatedY);
             }
         }
     }
