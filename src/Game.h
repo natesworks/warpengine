@@ -42,10 +42,11 @@ public:
 private:
     std::unordered_map<EventType, std::vector<std::function<void(Event& event)>>> eventHandlers;
     SDL_Window *gameWindow = nullptr;
-    int originalWidth;
-    int originalHeight;
     int width;
     int height;
+
+    float referenceWidth = 1000.1f;
+    float referenceHeight = 1000.1f;
 
     void handleEvents();
     void gameLoop();

@@ -35,7 +35,7 @@ int main()
     Button button2(object2, [&game, &object2]() { onClick(game, *object2); });
     object2->addComponent(std::move(button2));
     Rectangle hitbox2(object);
-    object2->addComponent(std::move(hitbox2));
+    //object2->addComponent(std::move(hitbox2));
 
     game.start();
 

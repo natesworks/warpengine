@@ -17,15 +17,8 @@ bool Object::isMouseOver(Vector2 mousePosition)
     int y = position.y;
     bool isMouseOver;
 
-    std::cout << "Mouse position: " << mousePosition.x << ", " << mousePosition.y << std::endl;
-    std::cout << "Object position: " << x << ", " << y << std::endl;
-    std::cout << "Object position taking into account scale: " << x + scale.x << ", " << y + scale.y << std::endl;
-    std::cout << "Object position taking into account window scale: " << x * game->scaleX << ", " << y * game->scaleY << std::endl;
-    std::cout << "Object position taking into account both: " << x * game->scaleX + scale.x << ", " << y * game->scaleY + scale.x << std::endl;
-
     if (mousePosition.x > x * game->scaleX && mousePosition.x < x * game->scaleX + scale.x / 2 && mousePosition.y > y * game->scaleY && mousePosition.y < y * game->scaleY + scale.y / 2)
     {
-        std::cout << "Mouse is over object" << std::endl;
         isMouseOver = true;
     }
     else
