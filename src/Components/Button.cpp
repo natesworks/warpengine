@@ -2,7 +2,7 @@
 
 #include "Button.h"
 
-Button::Button(Object *object)
+Button::Button(Object *object, std::function<void()> onClickFunction) : onClickFunction(onClickFunction)
 {
 
 }
@@ -19,10 +19,15 @@ void Button::draw(Object *object)
 
 void Button::onEvent(Event &event)
 {
-    if (event.type == EventType::MOUSEBUTTONDOWN)
+    if (event.type == EventType::MOUSEBUTTONDOWN && onClickFunction)
     {
-        std::cout << "Button clicked\n";
+        onClickFunction();
     }
+}
+
+void Button::setOnClickFunction(std::function<void()> func)
+{
+    onClickFunction = func;
 }
 
 std::unique_ptr<Component> Button::clone() const
