@@ -13,11 +13,11 @@ class Drawer
 public:
     Drawer(Game *game) : game(game) {};
     void drawAll();
-    void drawLine(Point start, Point end, RGB color);
-    void drawRectangle(Point start, Point end, RGB color);
-    void drawFilledRectangle(Point start, Point end, RGB color);
-    void drawEllipse(Point center, int radiusX, int radiusY, RGB color);
-    void drawFilledEllipse(Point center, int x, int y, RGB color);
+    void drawLine(Point start, Point end, RGB color, float rotation = 0);
+    void drawRectangle(Point start, Point end, RGB color, float rotation = 0);
+    void drawFilledRectangle(Point start, Point end, RGB color, float rotation = 0);
+    void drawEllipse(Point center, float radiusX, float radiusY, RGB color, float rotation = 0);
+    void drawFilledEllipse(Point center, int x, int y, RGB color, float rotation = 0);
 
 private:
     Game *game;

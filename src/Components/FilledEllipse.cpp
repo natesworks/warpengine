@@ -13,7 +13,7 @@ FilledEllipse::~FilledEllipse()
 
 void FilledEllipse::draw(Object *object)
 {
-    object->game->drawer->drawFilledEllipse(Point(object->position.x, object->position.y), object->scale.x, object->scale.y, object->color);
+    object->game->drawer->drawFilledEllipse(Point(object->position.x, object->position.y), object->scale.x, object->scale.y, object->color, object->rotation);
 }
 
 std::unique_ptr<Component> FilledEllipse::clone() const

@@ -16,7 +16,7 @@ public:
     std::vector<std::unique_ptr<Component>> components;
     Vector2 position;
     Vector2 scale;
-    Vector2 rotation;
+    float rotation;
     RGB color;
     Game *game;
 
@@ -30,6 +30,6 @@ public:
         return *components.at(index);
     }
 
-    Object(Game* game, Vector2 position, Vector2 scale, Vector2 rotation, RGB color) 
+    Object(Game* game, Vector2 position, Vector2 scale, float rotation, RGB color) 
         : game(game), position(position), scale(scale), rotation(rotation), color(color) {}
 };

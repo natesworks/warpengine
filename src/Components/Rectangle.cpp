@@ -13,7 +13,7 @@ Rectangle::~Rectangle()
 
 void Rectangle::draw(Object *object)
 {
-    object->game->drawer->drawRectangle(Point(object->position.x, object->position.y), Point(object->position.x + object->scale.x, object->position.y + object->scale.y), object->color);
+    object->game->drawer->drawRectangle(Point(object->position.x, object->position.y), Point(object->position.x + object->scale.x, object->position.y + object->scale.y), object->color, object->rotation);
 }
 
 std::unique_ptr<Component> Rectangle::clone() const
