@@ -124,71 +124,68 @@ void Game::handleEvents()
 
                 scaleX = (float)width / originalWidth;
                 scaleY = (float)height / originalHeight;
-
-                drawer->drawAll();
             }
         }
         else if (event.type == SDL_KEYDOWN)
         {
-            uint32_t key = event.key.keysym.sym;
+            Event e;
+            e.type = EventType::KEYDOWN;
+            e.key = event.key.keysym.sym;
             if (eventHandlers.find(KEYDOWN) != eventHandlers.end())
             {
-                Event e;
-                e.type = EventType::KEYDOWN;
-                e.key = key;
                 for (auto handler : eventHandlers[KEYDOWN])
                 {
                     handler(e);
                 }
-                for (const std::unique_ptr<Object> &object : objects)
+            }
+            for (const std::unique_ptr<Object> &object : objects)
+            {
+                for (std::unique_ptr<Component> &component : object->components)
                 {
-                    for (std::unique_ptr<Component> &component : object->components)
-                    {
-                        component->onEvent(e);
-                    }
+                    component->onEvent(e);
                 }
             }
         }
         else if (event.type == SDL_KEYUP)
         {
-            uint32_t key = event.key.keysym.sym;
+            Event e;
+            e.type = EventType::KEYUP;
+            e.key = event.key.keysym.sym;
             if (eventHandlers.find(KEYUP) != eventHandlers.end())
             {
-                Event e;
-                e.type = EventType::KEYUP;
-                e.key = key;
                 for (std::function<void(Event & event)> handler : eventHandlers[KEYUP])
                 {
                     handler(e);
                 }
-                for (const std::unique_ptr<Object> &object : objects)
+            }
+            for (const std::unique_ptr<Object> &object : objects)
+            {
+                for (std::unique_ptr<Component> &component : object->components)
                 {
-                    for (std::unique_ptr<Component> &component : object->components)
-                    {
-                        component->onEvent(e);
-                    }
+                    component->onEvent(e);
                 }
             }
         }
         else if (event.type == SDL_MOUSEBUTTONDOWN)
         {
+            Event e;
+            e.type = EventType::MOUSEBUTTONDOWN;
+            e.mouseButton = event.button.button;
+            e.mousePosition = Vector2(event.button.x, event.button.y);
             if (eventHandlers.find(MOUSEBUTTONDOWN) != eventHandlers.end())
             {
-                Event e;
-                e.type = EventType::MOUSEBUTTONDOWN;
-                e.mouseButton = event.button.button;
                 for (std::function<void(Event & event)> handler : eventHandlers[MOUSEBUTTONDOWN])
                 {
                     handler(e);
                 }
-                for (const std::unique_ptr<Object> &object : objects)
+            }
+            for (const std::unique_ptr<Object> &object : objects)
+            {
+                if (object->isMouseOver(e.mousePosition))
                 {
-                    if (object->isMouseOver(e.mousePosition))
+                    for (std::unique_ptr<Component> &component : object->components)
                     {
-                        for (std::unique_ptr<Component> &component : object->components)
-                        {
-                            component->onEvent(e);
-                        }
+                        component->onEvent(e);
                     }
                 }
             }
@@ -200,13 +197,14 @@ void Game::handleEvents()
                 Event e;
                 e.type = EventType::MOUSEBUTTONUP;
                 e.mouseButton = event.button.button;
+                e.mousePosition = Vector2(event.button.x, event.button.y);
                 for (std::function<void(Event & event)> handler : eventHandlers[MOUSEBUTTONUP])
                 {
                     handler(e);
                 }
                 for (const std::unique_ptr<Object> &object : objects)
                 {
-                    if (object->isMouseOver(e.mousePosition))
+                    if (object->isMouseOver(e.mousePosition) == true)
                     {
                         for (std::unique_ptr<Component> &component : object->components)
                         {

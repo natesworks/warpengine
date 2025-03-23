@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <iostream>
 
 #include "../Types/Component.h"
 #include "Vector2.h"
@@ -32,7 +33,16 @@ public:
 
     bool isMouseOver(Vector2 mousePosition)
     {
-        return mousePosition.x >= position.x && mousePosition.x <= position.x + scale.x && mousePosition.y >= position.y && mousePosition.y <= position.y + scale.y;
+        Vector2 localMousePosition = mousePosition - position;
+
+        float cosTheta = cos(-rotation);
+        float sinTheta = sin(-rotation);
+        float localX = localMousePosition.x * cosTheta - localMousePosition.y * sinTheta;
+        float localY = localMousePosition.x * sinTheta + localMousePosition.y * cosTheta;
+
+        bool isMouseOver = localX >= 0 && localX <= scale.x && localY >= 0 && localY <= scale.y;
+
+        return isMouseOver;
     }
 
     Object(Game* game, Vector2 position, Vector2 scale, float rotation, RGB color) 
