@@ -216,39 +216,49 @@ void Game::handleEvents()
         }
         else if (event.type == SDL_MOUSEMOTION)
         {
+            Event e;
+            e.type = EventType::MOUSEMOTION;
+            e.mousePosition.x = event.motion.x;
+            e.mousePosition.y = event.motion.y;
             if (eventHandlers.find(MOUSEMOTION) != eventHandlers.end())
             {
-                Event e;
-                e.type = EventType::MOUSEMOTION;
-                e.mousePosition.x = event.motion.x;
-                e.mousePosition.y = event.motion.y;
                 for (std::function<void(Event & event)> handler : eventHandlers[MOUSEMOTION])
                 {
                     handler(e);
                 }
-                for (const std::unique_ptr<Object> &object : objects)
+            }
+            for (const std::unique_ptr<Object> &object : objects)
+            {
+                if (object->isMouseOver(e.mousePosition))
                 {
-                    if (object->isMouseOver(e.mousePosition))
+                    for (std::unique_ptr<Component> &component : object->components)
                     {
-                        for (std::unique_ptr<Component> &component : object->components)
-                        {
-                            component->onEvent(e);
-                        }
+                        component->onEvent(e);
                     }
                 }
             }
         }
         else if (event.type == SDL_MOUSEWHEEL)
         {
+            Event e;
+            e.type = EventType::MOUSEWHEEL;
+            e.mouseWheel.x = event.wheel.x;
+            e.mouseWheel.y = event.wheel.y;
             if (eventHandlers.find(MOUSEWHEEL) != eventHandlers.end())
             {
-                Event e;
-                e.type = EventType::MOUSEWHEEL;
-                e.mouseWheel.x = event.wheel.x;
-                e.mouseWheel.y = event.wheel.y;
                 for (std::function<void(Event & event)> handler : eventHandlers[MOUSEWHEEL])
                 {
                     handler(e);
+                }
+            }
+            for (const std::unique_ptr<Object> &object : objects)
+            {
+                if (object->isMouseOver(e.mousePosition))
+                {
+                    for (std::unique_ptr<Component> &component : object->components)
+                    {
+                        component->onEvent(e);
+                    }
                 }
             }
         }
