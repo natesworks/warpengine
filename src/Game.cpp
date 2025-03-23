@@ -137,7 +137,10 @@ void Game::handleEvents()
                 Event e;
                 e.type = EventType::KEYDOWN;
                 e.key = key;
-                eventHandlers[KEYDOWN](e);
+                for (auto handler : eventHandlers[KEYDOWN])
+                {
+                    handler(e);
+                }
             }
         }
         else if (event.type == SDL_KEYUP)
@@ -148,7 +151,10 @@ void Game::handleEvents()
                 Event e;
                 e.type = EventType::KEYUP;
                 e.key = key;
-                eventHandlers[KEYUP](e);
+                for (std::function<void(Event& event)> handler : eventHandlers[KEYUP])
+                {
+                    handler(e);
+                }
             }
         }
         else if (event.type == SDL_MOUSEBUTTONDOWN)
@@ -158,7 +164,10 @@ void Game::handleEvents()
                 Event e;
                 e.type = EventType::MOUSEBUTTONDOWN;
                 e.mouseButton = event.button.button;
-                eventHandlers[MOUSEBUTTONDOWN](e);
+                for (std::function<void(Event& event)> handler : eventHandlers[MOUSEBUTTONDOWN])
+                {
+                    handler(e);
+                }
             }
         }
         else if (event.type == SDL_MOUSEBUTTONUP)
@@ -168,7 +177,10 @@ void Game::handleEvents()
                 Event e;
                 e.type = EventType::MOUSEBUTTONUP;
                 e.mouseButton = event.button.button;
-                eventHandlers[MOUSEBUTTONUP](e);
+                for (std::function<void(Event& event)> handler : eventHandlers[MOUSEBUTTONUP])
+                {
+                    handler(e);
+                }
             }
         }
         else if (event.type == SDL_MOUSEMOTION)
@@ -179,7 +191,10 @@ void Game::handleEvents()
                 e.type = EventType::MOUSEMOTION;
                 e.mousePosition.x = event.motion.x;
                 e.mousePosition.y = event.motion.y;
-                eventHandlers[MOUSEMOTION](e);
+                for (std::function<void(Event& event)> handler : eventHandlers[MOUSEMOTION])
+                {
+                    handler(e);
+                }
             }
         }
         else if (event.type == SDL_MOUSEWHEEL)
@@ -190,7 +205,10 @@ void Game::handleEvents()
                 e.type = EventType::MOUSEWHEEL;
                 e.mouseWheel.x = event.wheel.x;
                 e.mouseWheel.y = event.wheel.y;
-                eventHandlers[MOUSEWHEEL](e);
+                for (std::function<void(Event& event)> handler : eventHandlers[MOUSEWHEEL])
+                {
+                    handler(e);
+                }
             }
         }
     }
@@ -206,9 +224,15 @@ Object *Game::getObject(int index)
     return objects.at(index).get();
 }
 
-void Game::setEventHandler(EventType eventType, std::function<void (Event &)> handler)
+int Game::addEventHandler(EventType eventType, std::function<void (Event &)> handler)
 {
-    eventHandlers[eventType] = handler;
+    eventHandlers[eventType].push_back(handler);
+    return eventHandlers[eventType].size() - 1;
+}
+
+void Game::removeEventHandler(EventType eventType, int index)
+{
+    eventHandlers[eventType].erase(eventHandlers[eventType].begin() + index);
 }
 
 void Game::gameLoop()

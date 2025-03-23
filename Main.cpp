@@ -21,7 +21,7 @@ int main()
 
     game.start();
 
-    game.setEventHandler(EventType::MOUSEBUTTONDOWN, [&game, &object, &object2](Event e) 
+    game.addEventHandler(EventType::MOUSEBUTTONDOWN, [&game, &object, &object2](Event e) 
     {
         int randomX1 = rand() % game.getWindowWidth();
         int randomY1 = rand() % game.getWindowHeight();

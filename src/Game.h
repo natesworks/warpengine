@@ -32,14 +32,15 @@ public:
     void addObject(Object);
     Object* getObject(int index);
 
-    void setEventHandler(EventType eventType, std::function<void(Event& event)> handler);
+    int addEventHandler(EventType eventType, std::function<void(Event& event)> handler);
+    void removeEventHandler(EventType eventType, int index);
     void start();
 
     int getWindowWidth();
     int getWindowHeight();
 
 private:
-    std::unordered_map<EventType, std::function<void(Event& event)>> eventHandlers;
+    std::unordered_map<EventType, std::vector<std::function<void(Event& event)>>> eventHandlers;
     SDL_Window *gameWindow = nullptr;
     int originalWidth;
     int originalHeight;
@@ -48,7 +49,7 @@ private:
 
     void handleEvents();
     void gameLoop();
-};
+};;
 
 class InitialisationFailed {};
 class WindowCreationFailed {};
