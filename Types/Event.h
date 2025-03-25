@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "../Enums/EventType.h"
+#include "EventType.h"
 #include "Vector2.h"
 
 struct Event

@@ -1,9 +1,14 @@
 CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 `sdl2-config --cflags` -g -no-pie
-LDFLAGS := `sdl2-config --libs`
+CXXFLAGS := -Wall -Wextra -std=c++17 `sdl2-config --cflags` -g -fPIC
+LDFLAGS := `sdl2-config --libs` -shared
 SRC := $(wildcard *.cpp */*.cpp */*/*.cpp)
 OBJ := $(SRC:.cpp=.o)
-TARGET := warpengine-test
+
+ifeq ($(OS),Windows_NT)
+    TARGET := warpengine.dll
+else
+    TARGET := libwarpengine.so
+endif
 
 all: $(TARGET)
 
@@ -15,3 +20,4 @@ $(TARGET): $(OBJ)
 
 clean:
 	rm -f $(OBJ) $(TARGET)
+

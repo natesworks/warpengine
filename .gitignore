@@ -6,3 +6,5 @@ output/
 *.exe
 .vscode
 warpengine-test
+libwarpengine.so
+warpengine.dll
