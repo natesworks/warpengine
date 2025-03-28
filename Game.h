@@ -11,6 +11,7 @@
 #include "Types/Object.h"
 #include "Rendering/Drawer.h"
 #include "Types/Event.h"
+#include "Types/Vector2.h"
 
 class Object;
 class Drawer;
@@ -19,8 +20,7 @@ class Game
 {
 public:
     SDL_Renderer *renderer = nullptr;
-    float scaleX;
-    float scaleY;
+    Vector2 scale;
     std::vector<std::unique_ptr<Object>> objects;
     std::unique_ptr<Drawer> drawer;
 

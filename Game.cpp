@@ -30,8 +30,8 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     }
     width = w;
     height = h;
-    scaleX = w / referenceWidth;
-    scaleY = h / referenceHeight;
+    scale.x = w / referenceWidth;
+    scale.y = h / referenceHeight;
     SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
 
@@ -69,8 +69,8 @@ Game::Game(std::string title)
     {
         throw WindowCreationFailed();
     }
-    scaleX = displayMode.w / referenceWidth;
-    scaleY = displayMode.h / referenceHeight;
+    scale.x = displayMode.w / referenceWidth;
+    scale.y = displayMode.h / referenceHeight;
     SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
     if (!renderer)
@@ -117,8 +117,8 @@ void Game::handleEvents()
                 SDL_Rect newViewport = {0, 0, width, height};
                 SDL_RenderSetViewport(renderer, &newViewport);
 
-                scaleX = (float)width / referenceWidth;
-                scaleY = (float)height / referenceHeight;
+                scale.x = (float)width / referenceWidth;
+                scale.y = (float)height / referenceHeight;
             }
         }
         else if (event.type == SDL_KEYDOWN)
