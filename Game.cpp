@@ -125,6 +125,7 @@ void Game::gameLoop()
 {
     while (true)
     {
+    eventhandler:
         drawer->drawAll();
         SDL_Event event;
         SDL_WaitEvent(&event);
@@ -148,20 +149,17 @@ void Game::gameLoop()
         else if (event.type == SDL_KEYDOWN)
         {
             Event e;
-            e.type = EventType::KEYDOWN;
+            e.type = EventType::KEYDOWNONCE;
             e.key = (uint8_t *)SDL_GetKeyboardState(NULL);
+            if (event.key.repeat)
+            {
+                goto eventhandler; // labels are cool unlike what phoog says (noob)
+            }
             if (eventHandlers.find(KEYDOWN) != eventHandlers.end())
             {
-                for (auto handler : eventHandlers[KEYDOWN])
+                for (auto handler : eventHandlers[KEYDOWNONCE])
                 {
                     handler(e);
-                }
-                if (!event.key.repeat)
-                {
-                    for (auto handler : eventHandlers[KEYDOWNONCE])
-                    {
-                        handler(e);
-                    }
                 }
             }
             for (const std::unique_ptr<Object> &object : objects)
@@ -268,7 +266,7 @@ void Game::gameLoop()
                 }
             }
         }
-        else if (event.type == SDL_MOUSEWHEEL && false)
+        else if (event.type == SDL_MOUSEWHEEL)
         {
             Event e;
             e.type = EventType::MOUSEWHEEL;
@@ -288,6 +286,32 @@ void Game::gameLoop()
                     for (std::unique_ptr<Component> &component : object->components)
                     {
                         component->onEvent(e);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Event e;
+            e.type = EventType::KEYDOWN;
+            e.key = (uint8_t *)SDL_GetKeyboardState(NULL); 
+            for (int i = 0; i < 512; i++)
+            {
+                if (e.key[i] == 1)
+                {
+                    if (eventHandlers.find(KEYDOWN) != eventHandlers.end())
+                    {
+                        for (std::function<void(Event & event)> handler : eventHandlers[KEYDOWN])
+                        {
+                            handler(e);
+                        }
+                    }
+                    for (const std::unique_ptr<Object> &object : objects)
+                    {
+                        for (std::unique_ptr<Component> &component : object->components)
+                        {
+                            component->onEvent(e);
+                        }
                     }
                 }
             }
