@@ -34,7 +34,6 @@ void BoxCollider::onEvent(Event &event)
                 {
                     if (obj.isColliding(object))
                     {
-                        std::cout << "Colliding" << std::endl;
                         object->setPosition(object->previousPosition);
                     }
                 }

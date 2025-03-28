@@ -29,21 +29,20 @@ bool Object::isColliding(Vector2 position)
 
 bool Object::isColliding(Object *object)
 {
-    int x = this->position.x * game->scale.x;
-    int y = this->position.y * game->scale.y;
-    int objX = object->position.x * game->scale.x;
-    int objY = object->position.y * game->scale.y;
-    bool isColliding = false;
+    float x = this->position.x * game->scale.x;
+    float y = this->position.y * game->scale.y;
+    float x2 = object->position.x * game->scale.x;
+    float y2 = object->position.y * game->scale.y;
 
-    if (x < objX + object->scale.x / 2 &&
-        x + scale.x / 2 > objX &&
-        y < objY + object->scale.y / 2 &&
-        y + scale.y / 2 > objY)
-    {
-        isColliding = true;
-    }
+    float w1 = this->scale.x * game->scale.x;
+    float w2 = object->scale.x * game->scale.x;
+    float h1 = this->scale.y * game->scale.y;
+    float h2 = object->scale.y * game->scale.y;
 
-    return isColliding;
+    return (x < x2 + w2 &&
+            x + w1 > x2 &&
+            y < y2 + h2 &&
+            y + h1 > y2);
 }
 
 void Object::setPosition(Vector2 position)
