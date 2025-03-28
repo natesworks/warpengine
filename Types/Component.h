@@ -4,6 +4,7 @@
 
 #include "Event.h"
 
+struct Event;
 class Object;
 
 class Component

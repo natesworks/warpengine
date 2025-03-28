@@ -3,9 +3,12 @@
 #include <cstdint>
 
 #include "EventType.h"
+#include "Object.h"
 #include "Vector2.h"
 
-struct Event
+class Object;
+
+class Event
 {
 public:
     EventType type;
@@ -13,4 +16,7 @@ public:
     uint8_t mouseButton;
     Vector2 mousePosition; // only for MOUSEMOTION
     Vector2 mouseWheel; // only for MOUSEWHEEL
+    Object* object; // only for OBJECTPOSITIONCHANGED
+    Event (EventType type) : type(type) {}
+    Event () {}
 };

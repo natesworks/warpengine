@@ -209,12 +209,9 @@ void Game::gameLoop()
             }
             for (const std::unique_ptr<Object> &object : objects)
             {
-                if (object->isMouseOver(e.mousePosition) == true)
+                for (std::unique_ptr<Component> &component : object->components)
                 {
-                    for (std::unique_ptr<Component> &component : object->components)
-                    {
-                        component->onEvent(e);
-                    }
+                    component->onEvent(e);
                 }
             }
         }
@@ -232,12 +229,9 @@ void Game::gameLoop()
                 }
                 for (const std::unique_ptr<Object> &object : objects)
                 {
-                    if (object->isMouseOver(e.mousePosition) == true)
+                    for (std::unique_ptr<Component> &component : object->components)
                     {
-                        for (std::unique_ptr<Component> &component : object->components)
-                        {
-                            component->onEvent(e);
-                        }
+                        component->onEvent(e);
                     }
                 }
             }
@@ -257,7 +251,7 @@ void Game::gameLoop()
             }
             for (const std::unique_ptr<Object> &object : objects)
             {
-                if (object->isMouseOver(e.mousePosition) == true)
+                if (object->isColliding(e.mousePosition) == true)
                 {
                     for (std::unique_ptr<Component> &component : object->components)
                     {
@@ -281,20 +275,18 @@ void Game::gameLoop()
             }
             for (const std::unique_ptr<Object> &object : objects)
             {
-                if (object->isMouseOver(e.mousePosition) == true)
+                for (std::unique_ptr<Component> &component : object->components)
                 {
-                    for (std::unique_ptr<Component> &component : object->components)
-                    {
-                        component->onEvent(e);
-                    }
+                    component->onEvent(e);
                 }
             }
         }
         else
         {
+            // fix if you press two balancing themselves out keys (W and S, A and D) at the same time and then let one go you won't move
             Event e;
             e.type = EventType::KEYDOWN;
-            e.key = (uint8_t *)SDL_GetKeyboardState(NULL); 
+            e.key = (uint8_t *)SDL_GetKeyboardState(NULL);
             for (int i = 0; i < 512; i++)
             {
                 if (e.key[i] == 1)
@@ -333,4 +325,22 @@ int Game::getWindowWidth()
 int Game::getWindowHeight()
 {
     return height;
+}
+
+void Game::handleEvent(Event &event)
+{
+    if (eventHandlers.find(event.type) != eventHandlers.end())
+    {
+        for (std::function<void(Event & event)> handler : eventHandlers[event.type])
+        {
+            handler(event);
+        }
+    }
+    for (const std::unique_ptr<Object> &object : objects)
+    {
+        for (std::unique_ptr<Component> &component : object->components)
+        {
+            component->onEvent(event);
+        }
+    }
 }

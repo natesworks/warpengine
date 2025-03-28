@@ -2,7 +2,7 @@
 
 #include "Button.h"
 
-Button::Button(Object *object, std::function<void()> onClickFunction) : onClickFunction(onClickFunction)
+Button::Button(Object *object, std::function<void()> onClickFunction) : onClickFunction(onClickFunction), object(object)
 {
 
 }
@@ -19,7 +19,7 @@ void Button::draw(Object *object)
 
 void Button::onEvent(Event &event)
 {
-    if (event.type == EventType::MOUSEBUTTONDOWN && onClickFunction)
+    if (event.type == EventType::MOUSEBUTTONDOWN && onClickFunction && object->isColliding(event.mousePosition))
     {
         onClickFunction();
     }

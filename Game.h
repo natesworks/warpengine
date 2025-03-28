@@ -15,6 +15,7 @@
 
 class Object;
 class Drawer;
+struct Event;
 
 class Game
 {
@@ -40,9 +41,9 @@ public:
     int getWindowHeight();
 
     bool togglableFullscreen = true;
+    void handleEvent(Event& event);
 
 private:
-    std::unordered_map<EventType, std::vector<std::function<void(Event& event)>>> eventHandlers;
     SDL_Window *gameWindow = nullptr;
     int width;
     int height;
@@ -51,6 +52,7 @@ private:
     float referenceHeight = 1080.0f;
 
     void gameLoop();
+    std::unordered_map<EventType, std::vector<std::function<void(Event& event)>>> eventHandlers;
 };;
 
 class InitialisationFailed {};

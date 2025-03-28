@@ -11,6 +11,7 @@
 #include "../Types/RGB.h"
 
 class Game;
+class Component;
 
 class Object
 {
@@ -22,7 +23,8 @@ public:
     void addComponent(const Component& component);
     Component& getComponent(int index);
 
-    bool isMouseOver(Vector2 mousePosition);
+    bool isColliding(Vector2 position);
+    bool isColliding(Object* object);
 
     void setPosition(Vector2 position);
     void setScale(Vector2 scale);
@@ -30,10 +32,13 @@ public:
 
     Vector2 getPosition();
     Vector2 getScale();
+    
     float getRotation();
 
+    Vector2 previousPosition;
+
     Object(Game* game, Vector2 position, Vector2 scale, float rotation, RGB color) 
-        : game(game), position(position), scale(scale), rotation(rotation), color(color) {}
+        : game(game), position(position), scale(scale), rotation(rotation), color(color), previousPosition(position) {}
 private:
     Vector2 position;
     Vector2 scale;

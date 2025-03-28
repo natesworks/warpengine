@@ -1,44 +1,59 @@
 #include "Object.h"
 #include "../Game.h"
+#include "Event.h"
+#include "EventType.h"
 
-void Object::addComponent(const Component& component)
+void Object::addComponent(const Component &component)
 {
     components.push_back(component.clone());
 }
 
-Component& Object::getComponent(int index)
+Component &Object::getComponent(int index)
 {
     return *components.at(index);
 }
 
-bool Object::isMouseOver(Vector2 mousePosition)
+bool Object::isColliding(Vector2 position)
 {
-    int x = position.x;
-    int y = position.y;
-    bool isMouseOver;
+    int x = this->position.x;
+    int y = this->position.y;
+    bool isColliding = false;
 
-    /*
-    std::cout << "Mouse Position: " << mousePosition.x << ", " << mousePosition.y << "\n";
-    std::cout << "Object Position: " << x << ", " << y << "\n";
-    std::cout << "Scale: " << scale.x << ", " << scale.y << "\n";
-    std::cout << "Window scale: " << game->scaleX << ", " << game->scaleY << "\n\n";
-    */
-
-    if (mousePosition.x > x * game->scale.x && mousePosition.x < x * game->scale.x + scale.x && mousePosition.y > y * game->scale.y && mousePosition.y < y * game->scale.y + scale.y)
+    if (position.x > x * game->scale.x && position.x < x * game->scale.x + scale.x && position.y > y * game->scale.y && position.y < y * game->scale.y + scale.y)
     {
-        isMouseOver = true;
-    }
-    else
-    {
-        isMouseOver = false;
+        isColliding = true;
     }
 
-    return isMouseOver;
+    return isColliding;
+}
+
+bool Object::isColliding(Object *object)
+{
+    int x = this->position.x * game->scale.x;
+    int y = this->position.y * game->scale.y;
+    int objX = object->position.x * game->scale.x;
+    int objY = object->position.y * game->scale.y;
+    bool isColliding = false;
+
+    if (x < objX + object->scale.x / 2 &&
+        x + scale.x / 2 > objX &&
+        y < objY + object->scale.y / 2 &&
+        y + scale.y / 2 > objY)
+    {
+        isColliding = true;
+    }
+
+    return isColliding;
 }
 
 void Object::setPosition(Vector2 position)
 {
+    previousPosition = this->position;
     this->position = position;
+    Event e(OBJECTPOSITIONCHANGED);
+    e.object = this;
+
+    game->handleEvent(e);
 }
 
 void Object::setScale(Vector2 scale)
