@@ -23,7 +23,7 @@ void PlayerMovement::onEvent(Event &event)
 {
     if (event.type == EventType::KEYDOWN)
     {
-        if (event.key[SDL_SCANCODE_W])
+        if (event.key[KEY_W])
         {
             object->setPosition(Vector2(object->getPosition().x, object->getPosition().y - speed));
         }

@@ -156,6 +156,13 @@ void Game::gameLoop()
                 {
                     handler(e);
                 }
+                if (!event.key.repeat)
+                {
+                    for (auto handler : eventHandlers[KEYDOWNONCE])
+                    {
+                        handler(e);
+                    }
+                }
             }
             for (const std::unique_ptr<Object> &object : objects)
             {
