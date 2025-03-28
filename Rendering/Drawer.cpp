@@ -126,8 +126,8 @@ void Drawer::drawEllipse(Vector2 center, float radiusX, float radiusY, RGB color
         float cosRotation = cos(rotation);
         float sinRotation = sin(rotation);
 
-        float x = radiusX * cosRotation;
-        float y = radiusY * sinRotation;
+        float x = radiusX * cosRotation * game->scale.x;
+        float y = radiusY * sinRotation * game->scale.y;
 
         float translatedX = x * game->scale.x;
         float translatedY = y * game->scale.y;
