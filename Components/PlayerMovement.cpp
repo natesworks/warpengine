@@ -23,19 +23,19 @@ void PlayerMovement::onEvent(Event &event)
 {
     if (event.type == EventType::KEYDOWN)
     {
-        if (event.key == KEY_W)
+        if (event.key[SDL_SCANCODE_W])
         {
             object->setPosition(Vector2(object->getPosition().x, object->getPosition().y - speed));
         }
-        else if (event.key == KEY_A)
+        if (event.key[KEY_A])
         {
             object->setPosition(Vector2(object->getPosition().x - speed, object->getPosition().y));
         }
-        else if (event.key == KEY_S)
+        if (event.key[KEY_S])
         {
             object->setPosition(Vector2(object->getPosition().x, object->getPosition().y + speed));
         }
-        else if (event.key == KEY_D)
+        if (event.key[KEY_D])
         {
             object->setPosition(Vector2(object->getPosition().x + speed, object->getPosition().y));
         }

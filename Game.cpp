@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 #include <string.h>
@@ -8,6 +9,7 @@
 #include "Game.h"
 #include "Rendering/Drawer.h"
 #include "Types/Component.h"
+#include "Types/Keys.h"
 
 Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
 {
@@ -147,7 +149,7 @@ void Game::gameLoop()
         {
             Event e;
             e.type = EventType::KEYDOWN;
-            e.key = event.key.keysym.sym;
+            e.key = (uint8_t *)SDL_GetKeyboardState(NULL);
             if (eventHandlers.find(KEYDOWN) != eventHandlers.end())
             {
                 for (auto handler : eventHandlers[KEYDOWN])
@@ -162,7 +164,7 @@ void Game::gameLoop()
                     component->onEvent(e);
                 }
             }
-            if (togglableFullscreen && e.key == SDLK_F11)
+            if (togglableFullscreen && event.key.keysym.sym == SDLK_F11)
             {
                 SDL_SetWindowFullscreen(gameWindow, SDL_GetWindowFlags(gameWindow) ^ SDL_WINDOW_FULLSCREEN_DESKTOP);
             }
@@ -171,7 +173,7 @@ void Game::gameLoop()
         {
             Event e;
             e.type = EventType::KEYUP;
-            e.key = event.key.keysym.sym;
+            e.key = (uint8_t *)SDL_GetKeyboardState(NULL);
             if (eventHandlers.find(KEYUP) != eventHandlers.end())
             {
                 for (std::function<void(Event & event)> handler : eventHandlers[KEYUP])
