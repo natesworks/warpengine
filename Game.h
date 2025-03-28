@@ -50,7 +50,6 @@ private:
     float referenceWidth = 1920.0f;
     float referenceHeight = 1080.0f;
 
-    void handleEvents();
     void gameLoop();
 };;
 

@@ -98,10 +98,32 @@ Game::~Game()
     SDL_Quit();
 }
 
-void Game::handleEvents()
+void Game::addObject(Object object)
+{
+    objects.push_back(std::make_unique<Object>(std::move(object)));
+}
+
+Object *Game::getObject(int index)
+{
+    return objects.at(index).get();
+}
+
+int Game::addEventHandler(EventType eventType, std::function<void(Event &)> handler)
+{
+    eventHandlers[eventType].push_back(handler);
+    return eventHandlers[eventType].size() - 1;
+}
+
+void Game::removeEventHandler(EventType eventType, int index)
+{
+    eventHandlers[eventType].erase(eventHandlers[eventType].begin() + index);
+}
+
+void Game::gameLoop()
 {
     while (true)
     {
+        drawer->drawAll();
         SDL_Event event;
         SDL_WaitEvent(&event);
         if (event.type == SDL_QUIT)
@@ -264,40 +286,8 @@ void Game::handleEvents()
     }
 }
 
-void Game::addObject(Object object)
-{
-    objects.push_back(std::make_unique<Object>(std::move(object)));
-}
-
-Object *Game::getObject(int index)
-{
-    return objects.at(index).get();
-}
-
-int Game::addEventHandler(EventType eventType, std::function<void(Event &)> handler)
-{
-    eventHandlers[eventType].push_back(handler);
-    return eventHandlers[eventType].size() - 1;
-}
-
-void Game::removeEventHandler(EventType eventType, int index)
-{
-    eventHandlers[eventType].erase(eventHandlers[eventType].begin() + index);
-}
-
-void Game::gameLoop()
-{
-    while (true)
-    {
-        drawer->drawAll();
-    }
-}
-
 void Game::start()
 {
-    std::thread eventHandlerThread(&Game::handleEvents, this);
-    eventHandlerThread.detach();
-
     std::thread gameLoopThread(&Game::gameLoop, this);
     gameLoopThread.detach();
 }
