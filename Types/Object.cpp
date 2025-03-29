@@ -16,10 +16,11 @@ Object::~Object()
     }
 }
 
-Component *Object::addComponent(Component *component)
+template <typename T, typename... Args>
+Component *Object::addComponent(Args &&...args)
 {
+    Component* component = new T(this, std::forward<Args>(args)...);
     components.push_back(component);
-    return components.back();
 }
 
 Component *Object::getComponent(int index)

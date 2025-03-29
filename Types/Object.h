@@ -20,7 +20,8 @@ public:
     RGB color;
     Game *game;
 
-    Component *addComponent(Component *component);
+    template <typename T, typename... Args>
+    Component *addComponent(Args &&...args);
     Component *getComponent(int index);
 
     bool isColliding(Vector2 position);
