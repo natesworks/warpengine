@@ -7,9 +7,9 @@
 #include <thread>
 
 #include "Game.h"
-#include "Rendering/Drawer.h"
-#include "Types/Component.h"
-#include "Types/Keys.h"
+#include "../Rendering/Drawer.h"
+#include "../Types/Component.h"
+#include "../Types/Keys.h"
 
 Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
 {

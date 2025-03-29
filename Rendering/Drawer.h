@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include "../Types/RGB.h"
-#include "../Game.h"
+#include "../Core/Game.h"
 #include "../Types/Vector2.h"
 
 class Game;

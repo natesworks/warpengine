@@ -7,7 +7,7 @@
 
 #include "../Types/Component.h"
 #include "Vector2.h"
-#include "../Game.h"
+#include "../Core/Game.h"
 #include "../Types/RGB.h"
 
 class Game;

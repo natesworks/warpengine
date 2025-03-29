@@ -1,5 +1,5 @@
 #include "Object.h"
-#include "../Game.h"
+#include "../Core/Game.h"
 #include "Event.h"
 #include "EventType.h"
 

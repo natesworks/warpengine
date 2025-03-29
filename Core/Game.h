@@ -8,10 +8,10 @@
 #include <unordered_map>
 #include <functional>
 
-#include "Types/Object.h"
-#include "Rendering/Drawer.h"
-#include "Types/Event.h"
-#include "Types/Vector2.h"
+#include "../Types/Object.h"
+#include "../Rendering/Drawer.h"
+#include "../Types/Event.h"
+#include "../Types/Vector2.h"
 
 class Object;
 class Drawer;
