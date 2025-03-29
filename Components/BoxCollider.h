@@ -4,18 +4,15 @@
 
 #include "../Types/Component.h"
 #include "../Types/Object.h"
+#include "Collider.h"
 
-class BoxCollider : public Component
+class BoxCollider : public Collider
 {
 public:
-    BoxCollider(Object *object, bool isTrigger = false);
+    BoxCollider(Object *object, std::function<void()> onTriggerEnter = nullptr);
     ~BoxCollider();
     void draw(Object *object) override;
     void onEvent(Event &event) override;
 
     std::unique_ptr<Component> clone() const override;
-
-private:
-    Object *object;
-    bool isTrigger;
 };

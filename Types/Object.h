@@ -16,15 +16,15 @@ class Component;
 class Object
 {
 public:
-    std::vector<std::unique_ptr<Component>> components;
+    std::vector<Component *> components;
     RGB color;
     Game *game;
 
-    void addComponent(const Component& component);
-    Component& getComponent(int index);
+    Component *addComponent(Component *component);
+    Component *getComponent(int index);
 
     bool isColliding(Vector2 position);
-    bool isColliding(Object* object);
+    bool isColliding(Object *object);
 
     void setPosition(Vector2 position);
     void setScale(Vector2 scale);
@@ -32,15 +32,19 @@ public:
 
     Vector2 getPosition();
     Vector2 getScale();
-    
     float getRotation();
+    int getID();
 
     Vector2 previousPosition;
 
-    Object(Game* game, Vector2 position, Vector2 scale, float rotation, RGB color) 
-        : game(game), position(position), scale(scale), rotation(rotation), color(color), previousPosition(position) {}
+    Object(Game *game, Vector2 position, Vector2 scale, float rotation, RGB color);
+    ~Object();
+
+    bool operator!=(const Object &other) const;
+
 private:
     Vector2 position;
     Vector2 scale;
     float rotation;
+    int id;
 };

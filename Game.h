@@ -22,7 +22,6 @@ class Game
 public:
     SDL_Renderer *renderer = nullptr;
     Vector2 scale;
-    std::vector<std::unique_ptr<Object>> objects;
     std::unique_ptr<Drawer> drawer;
 
     Game(int x, int y, int w, int h, std::string title = "Game", bool borderless = false);
@@ -30,18 +29,17 @@ public:
     Game(std::string title = "Game");
     ~Game();
 
-    void addObject(Object);
-    Object* getObject(int index);
-
-    int addEventHandler(EventType eventType, std::function<void(Event& event)> handler);
+    Object *addObject(Object *object);
+    int addEventHandler(EventType eventType, std::function<void(Event &event)> handler);
     void removeEventHandler(EventType eventType, int index);
     void start();
 
     int getWindowWidth();
     int getWindowHeight();
+    void handleEvent(Event &event);
 
     bool togglableFullscreen = true;
-    void handleEvent(Event& event);
+    std::vector<Object *> objects;
 
 private:
     SDL_Window *gameWindow = nullptr;
@@ -52,10 +50,18 @@ private:
     float referenceHeight = 1080.0f;
 
     void gameLoop();
-    std::unordered_map<EventType, std::vector<std::function<void(Event& event)>>> eventHandlers;
-};;
+    std::unordered_map<EventType, std::vector<std::function<void(Event &event)>>> eventHandlers;
+};
 
-class InitialisationFailed {};
-class WindowCreationFailed {};
-class RendererCreationFailed {};
-class RenderFailed {};
+class InitialisationFailed
+{
+};
+class WindowCreationFailed
+{
+};
+class RendererCreationFailed
+{
+};
+class RenderFailed
+{
+};

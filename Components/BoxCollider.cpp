@@ -3,39 +3,23 @@
 
 #include "BoxCollider.h"
 
-BoxCollider::BoxCollider(Object *object, bool isTrigger)
-{
-    this->object = object;
-    this->isTrigger = isTrigger;
-}
-
-BoxCollider::~BoxCollider()
-{
-}
-
-void BoxCollider::draw(Object *object)
+BoxCollider::BoxCollider(Object *object, std::function<void()> onTriggerEnter)
+    : Collider(object, onTriggerEnter)
 {
 }
 
 void BoxCollider::onEvent(Event &event)
 {
-    if (event.type == OBJECTPOSITIONCHANGED && event.object == object)
+    if (event.type == OBJECTPOSITIONCHANGED && event.object->getID() == object->getID())
     {
-        if (isTrigger)
+        for (const auto &otherPtr : object->game->objects)
         {
-            // TODO
-        }
-        else
-        {
-            for (const auto& objPtr : object->game->objects)
+            Object &other = *otherPtr;
+            if (other != *object)
             {
-                Object& obj = *objPtr;
-                if (&obj != object)
+                if (object->isColliding(&other))
                 {
-                    if (obj.isColliding(object))
-                    {
-                        object->setPosition(object->previousPosition);
-                    }
+                    callOnTriggerEnter(other);
                 }
             }
         }
@@ -46,3 +30,6 @@ std::unique_ptr<Component> BoxCollider::clone() const
 {
     return std::make_unique<BoxCollider>(*this);
 }
+
+BoxCollider::~BoxCollider() {}
+void BoxCollider::draw(Object *object) {}

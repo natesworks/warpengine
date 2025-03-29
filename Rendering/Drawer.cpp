@@ -14,7 +14,7 @@ void Drawer::drawAll()
     {
         for (auto &component : object->components)
         {
-            component->draw(object.get());
+            component->draw(object);
         }
     }
 

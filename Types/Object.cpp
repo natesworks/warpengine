@@ -3,14 +3,28 @@
 #include "Event.h"
 #include "EventType.h"
 
-void Object::addComponent(const Component &component)
+Object::Object(Game *game, Vector2 position, Vector2 scale, float rotation, RGB color)
+    : game(game), position(position), scale(scale), rotation(rotation), color(color), previousPosition(position), id(game->objects.size())
 {
-    components.push_back(component.clone());
 }
 
-Component &Object::getComponent(int index)
+Object::~Object()
 {
-    return *components.at(index);
+    for (Component *component : components)
+    {
+        delete component;
+    }
+}
+
+Component *Object::addComponent(Component *component)
+{
+    components.push_back(component);
+    return components.back();
+}
+
+Component *Object::getComponent(int index)
+{
+    return components.at(index);
 }
 
 bool Object::isColliding(Vector2 position)
@@ -78,4 +92,14 @@ Vector2 Object::getScale()
 float Object::getRotation()
 {
     return rotation;
+}
+
+int Object::getID()
+{
+    return id;
+}
+
+bool Object::operator!=(const Object &other) const
+{
+    return this != &other;
 }

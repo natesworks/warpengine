@@ -100,14 +100,10 @@ Game::~Game()
     SDL_Quit();
 }
 
-void Game::addObject(Object object)
+Object* Game::addObject(Object *object)
 {
-    objects.push_back(std::make_unique<Object>(std::move(object)));
-}
-
-Object *Game::getObject(int index)
-{
-    return objects.at(index).get();
+    objects.push_back(object);
+    return objects.back();
 }
 
 int Game::addEventHandler(EventType eventType, std::function<void(Event &)> handler)
@@ -151,27 +147,13 @@ void Game::gameLoop()
             Event e;
             e.type = EventType::KEYDOWNONCE;
             e.key = (uint8_t *)SDL_GetKeyboardState(NULL);
-            if (event.key.repeat)
+            if (!event.key.repeat)
             {
-                goto eventhandler; // labels are cool unlike what phoog says (noob)
-            }
-            if (eventHandlers.find(KEYDOWN) != eventHandlers.end())
-            {
-                for (auto handler : eventHandlers[KEYDOWNONCE])
+                handleEvent(e);
+                if (togglableFullscreen && event.key.keysym.sym == SDLK_F11)
                 {
-                    handler(e);
+                    SDL_SetWindowFullscreen(gameWindow, SDL_GetWindowFlags(gameWindow) ^ SDL_WINDOW_FULLSCREEN_DESKTOP);
                 }
-            }
-            for (const std::unique_ptr<Object> &object : objects)
-            {
-                for (std::unique_ptr<Component> &component : object->components)
-                {
-                    component->onEvent(e);
-                }
-            }
-            if (togglableFullscreen && event.key.keysym.sym == SDLK_F11)
-            {
-                SDL_SetWindowFullscreen(gameWindow, SDL_GetWindowFlags(gameWindow) ^ SDL_WINDOW_FULLSCREEN_DESKTOP);
             }
         }
         else if (event.type == SDL_KEYUP)
@@ -179,20 +161,7 @@ void Game::gameLoop()
             Event e;
             e.type = EventType::KEYUP;
             e.key = (uint8_t *)SDL_GetKeyboardState(NULL);
-            if (eventHandlers.find(KEYUP) != eventHandlers.end())
-            {
-                for (std::function<void(Event & event)> handler : eventHandlers[KEYUP])
-                {
-                    handler(e);
-                }
-            }
-            for (const std::unique_ptr<Object> &object : objects)
-            {
-                for (std::unique_ptr<Component> &component : object->components)
-                {
-                    component->onEvent(e);
-                }
-            }
+            handleEvent(e);
         }
         else if (event.type == SDL_MOUSEBUTTONDOWN)
         {
@@ -200,65 +169,15 @@ void Game::gameLoop()
             e.type = EventType::MOUSEBUTTONDOWN;
             e.mouseButton = event.button.button;
             e.mousePosition = Vector2(event.button.x, event.button.y);
-            if (eventHandlers.find(MOUSEBUTTONDOWN) != eventHandlers.end())
-            {
-                for (std::function<void(Event & event)> handler : eventHandlers[MOUSEBUTTONDOWN])
-                {
-                    handler(e);
-                }
-            }
-            for (const std::unique_ptr<Object> &object : objects)
-            {
-                for (std::unique_ptr<Component> &component : object->components)
-                {
-                    component->onEvent(e);
-                }
-            }
+            handleEvent(e);
         }
-        else if (event.type == SDL_MOUSEBUTTONUP && false)
-        {
-            if (eventHandlers.find(MOUSEBUTTONUP) != eventHandlers.end())
-            {
-                Event e;
-                e.type = EventType::MOUSEBUTTONUP;
-                e.mouseButton = event.button.button;
-                e.mousePosition = Vector2(event.button.x, event.button.y);
-                for (std::function<void(Event & event)> handler : eventHandlers[MOUSEBUTTONUP])
-                {
-                    handler(e);
-                }
-                for (const std::unique_ptr<Object> &object : objects)
-                {
-                    for (std::unique_ptr<Component> &component : object->components)
-                    {
-                        component->onEvent(e);
-                    }
-                }
-            }
-        }
-        else if (event.type == SDL_MOUSEMOTION && false)
+        else if (event.type == SDL_MOUSEMOTION)
         {
             Event e;
             e.type = EventType::MOUSEMOTION;
             e.mousePosition.x = event.motion.x;
             e.mousePosition.y = event.motion.y;
-            if (eventHandlers.find(MOUSEMOTION) != eventHandlers.end())
-            {
-                for (std::function<void(Event & event)> handler : eventHandlers[MOUSEMOTION])
-                {
-                    handler(e);
-                }
-            }
-            for (const std::unique_ptr<Object> &object : objects)
-            {
-                if (object->isColliding(e.mousePosition) == true)
-                {
-                    for (std::unique_ptr<Component> &component : object->components)
-                    {
-                        component->onEvent(e);
-                    }
-                }
-            }
+            handleEvent(e);
         }
         else if (event.type == SDL_MOUSEWHEEL)
         {
@@ -266,20 +185,7 @@ void Game::gameLoop()
             e.type = EventType::MOUSEWHEEL;
             e.mouseWheel.x = event.wheel.x;
             e.mouseWheel.y = event.wheel.y;
-            if (eventHandlers.find(MOUSEWHEEL) != eventHandlers.end())
-            {
-                for (std::function<void(Event & event)> handler : eventHandlers[MOUSEWHEEL])
-                {
-                    handler(e);
-                }
-            }
-            for (const std::unique_ptr<Object> &object : objects)
-            {
-                for (std::unique_ptr<Component> &component : object->components)
-                {
-                    component->onEvent(e);
-                }
-            }
+            handleEvent(e);
         }
         else
         {
@@ -291,20 +197,7 @@ void Game::gameLoop()
             {
                 if (e.key[i] == 1)
                 {
-                    if (eventHandlers.find(KEYDOWN) != eventHandlers.end())
-                    {
-                        for (std::function<void(Event & event)> handler : eventHandlers[KEYDOWN])
-                        {
-                            handler(e);
-                        }
-                    }
-                    for (const std::unique_ptr<Object> &object : objects)
-                    {
-                        for (std::unique_ptr<Component> &component : object->components)
-                        {
-                            component->onEvent(e);
-                        }
-                    }
+                    handleEvent(e);
                 }
             }
         }
@@ -336,9 +229,9 @@ void Game::handleEvent(Event &event)
             handler(event);
         }
     }
-    for (const std::unique_ptr<Object> &object : objects)
+    for (Object *object : objects)
     {
-        for (std::unique_ptr<Component> &component : object->components)
+        for (Component *component : object->components)
         {
             component->onEvent(event);
         }
