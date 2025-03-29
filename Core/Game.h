@@ -29,7 +29,8 @@ public:
     Game(std::string title = "Game");
     ~Game();
 
-    Object *addObject(Object *object);
+    template <typename T, typename... Args>
+    Object *addObject(Args&&... args);
     int addEventHandler(EventType eventType, std::function<void(Event &event)> handler);
     void removeEventHandler(EventType eventType, int index);
     void start();
