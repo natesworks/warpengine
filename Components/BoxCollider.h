@@ -13,6 +13,4 @@ public:
     ~BoxCollider();
     void draw(Object *object) override;
     void onEvent(Event &event) override;
-
-    std::unique_ptr<Component> clone() const override;
 };

@@ -14,8 +14,6 @@ public:
     void onEvent(Event &event) override;
     void setOnClickFunction(std::function<void()> func);
 
-    std::unique_ptr<Component> clone() const override;
-
 private:
     std::function<void()> onClickFunction;
     Object* object;

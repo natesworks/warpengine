@@ -26,10 +26,5 @@ void BoxCollider::onEvent(Event &event)
     }
 }
 
-std::unique_ptr<Component> BoxCollider::clone() const
-{
-    return std::make_unique<BoxCollider>(*this);
-}
-
 BoxCollider::~BoxCollider() {}
 void BoxCollider::draw(Object *object) {}

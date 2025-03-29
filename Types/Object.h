@@ -21,8 +21,11 @@ public:
     Game *game;
 
     template <typename T, typename... Args>
-    Component *addComponent(Args &&...args);
-    Component *getComponent(int index);
+    Component *addComponent(Args &&...args)
+    {
+        auto component = new T(this, std::forward<Args>(args)...);
+        components.push_back(component);
+    }
 
     bool isColliding(Vector2 position);
     bool isColliding(Object *object);

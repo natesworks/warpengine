@@ -100,14 +100,6 @@ Game::~Game()
     SDL_Quit();
 }
 
-template <typename T, typename... Args>
-Object* Game::addObject(Args&&... args)
-{
-    Object *object = new T(this, std::forward<Args>(args)...);
-    objects.push_back(object);
-    return object;
-}
-
 int Game::addEventHandler(EventType eventType, std::function<void(Event &)> handler)
 {
     eventHandlers[eventType].push_back(handler);

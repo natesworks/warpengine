@@ -16,18 +16,6 @@ Object::~Object()
     }
 }
 
-template <typename T, typename... Args>
-Component *Object::addComponent(Args &&...args)
-{
-    Component* component = new T(this, std::forward<Args>(args)...);
-    components.push_back(component);
-}
-
-Component *Object::getComponent(int index)
-{
-    return components.at(index);
-}
-
 bool Object::isColliding(Vector2 position)
 {
     int x = this->position.x;

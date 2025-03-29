@@ -10,8 +10,6 @@ public:
     ~PlayerMovement();
     void draw(Object *object) override;
     void onEvent(Event &event) override;
-
-    std::unique_ptr<Component> clone() const override;
 private:
     Object *object;
     float speed;
