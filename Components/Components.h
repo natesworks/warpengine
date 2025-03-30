@@ -8,3 +8,4 @@
 #include "Text.h"
 #include "SpriteRenderer.h"
 #include "Triangle.h"
+#include "FilledTriangle.h"

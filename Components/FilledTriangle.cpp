@@ -14,5 +14,5 @@ FilledTriangle::~FilledTriangle()
 
 void FilledTriangle::draw(Object *object)
 {
-    object->game->drawer->drawFilledTriangle(object->getPosition(), Vector2(object->getPosition().x + object->getScale().x, object->getPosition().y + object->getScale().y), object->color, object->getRotation());
+    object->game->drawer->drawFilledTriangle(object->getPosition(), Vector2(object->getScale().x, object->getScale().y), object->color, object->getRotation());
 }

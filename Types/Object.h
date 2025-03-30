@@ -42,6 +42,19 @@ public:
     float getRotation();
     int getID();
     Object* getParent();
+
+    template <typename T>
+    T* getComponent()
+    {
+        for (auto component : components)
+        {
+            if (auto castComponent = dynamic_cast<T*>(component))
+            {
+                return castComponent;
+            }
+        }
+        return nullptr;
+    }    
     void disown(Object* child);
 
     Object(Game *game, Vector2 position, Vector2 scale, float rotation, RGB color);

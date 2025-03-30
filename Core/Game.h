@@ -43,6 +43,7 @@ public:
     int getWindowWidth();
     int getWindowHeight();
     double getDeltaTime();
+    double getFPS();
 
     void handleEvent(Event &event);
 
@@ -57,6 +58,7 @@ private:
     float referenceWidth = 1920.0f;
     float referenceHeight = 1080.0f;
     double deltaTime;
+    double fps;
 
     void gameLoop();
     std::unordered_map<EventType, std::vector<std::function<void(Event &event)>>> eventHandlers;

@@ -11,7 +11,7 @@ public:
     ~Text();
     void draw(Object *object) override;
     void onEvent(Event &event) override {}
-private:
+
     std::string font;
     std::string text;
     int fontSize;

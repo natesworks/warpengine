@@ -92,13 +92,16 @@ void Game::gameLoop()
     while (true)
     {
     eventhandler:
-        drawer->drawAll();
-        SDL_Event event;
-        SDL_PollEvent(&event);
-
         last = now;
         now = SDL_GetPerformanceCounter();
-        deltaTime = ((now - last)*1000 / (double)SDL_GetPerformanceFrequency() );
+        double frameTimeTicks = now - last;
+        double frameTime = frameTimeTicks / (double)SDL_GetPerformanceFrequency();
+        drawer->drawAll();
+        deltaTime = frameTime * 1000.0;
+        fps = (frameTime > 0) ? 1.0 / frameTime : 0.0f;
+
+        SDL_Event event;
+        SDL_PollEvent(&event);
 
         if (event.type == SDL_QUIT)
         {
@@ -242,4 +245,9 @@ void Game::handleEvent(Event &event)
 double Game::getDeltaTime()
 {
     return deltaTime;
+}
+
+double Game::getFPS()
+{
+    return fps;
 }
