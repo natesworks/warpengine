@@ -91,7 +91,7 @@ void Game::gameLoop()
     eventhandler:
         drawer->drawAll();
         SDL_Event event;
-        SDL_WaitEvent(&event);
+        SDL_PollEvent(&event);
         if (event.type == SDL_QUIT)
         {
             exit(0);

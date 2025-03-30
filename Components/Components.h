@@ -5,3 +5,4 @@
 #include "Rectangle.h"
 #include "FilledRectangle.h"
 #include "PlayerMovement.h"
+#include "Text.h"

@@ -166,7 +166,15 @@ void Drawer::drawFilledEllipse(Vector2 center, float radiusX, float radiusY, RGB
 
 void Drawer::drawText(std::string text, std::string fontPath, int fontSize, Vector2 position, Vector2 scale, RGB rgb)
 {
+    TTF_Init();
     TTF_Font* font = TTF_OpenFont(fontPath.c_str(), fontSize);
+    if (font == NULL)
+    {
+        std::cerr << "Failed to open font\n";
+        std::cerr << SDL_GetError() << "\n";
+        exit(1);
+    }
+
     SDL_Color color = {rgb.r, rgb.g, rgb.b};
     SDL_Surface *messageSurface = TTF_RenderText_Solid(font, text.c_str(), color); 
     SDL_Texture* messageTexture = SDL_CreateTextureFromSurface(game->renderer, messageSurface);
