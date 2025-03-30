@@ -19,8 +19,10 @@ public:
     void drawFilledRectangle(Vector2 start, Vector2 end, RGB color, float rotation = 0);
     void drawEllipse(Vector2 center, Vector2 radius, RGB color, float rotation = 0);
     void drawFilledEllipse(Vector2 center, Vector2 radius, RGB color, float rotation = 0);
-    void drawText(std::string text, std::string font, int fontSize, Vector2 position, Vector2 scale, RGB color);
-    void drawSprite(std::string image, Vector2 position, Vector2 scale, RGB color);
+    void drawText(std::string text, std::string font, int fontSize, Vector2 position, Vector2 scale, RGB color, float rotation = 0);
+    void drawSprite(std::string image, Vector2 position, Vector2 scale, RGB color, float rotation = 0);
+    void drawTriangle(Vector2 position, Vector2 scale, RGB color, float rotation = 0);
+    void drawFilledTriangle(Vector2 position, Vector2 scale, RGB color, float rotation = 0);
 
 private:
     Game *game;

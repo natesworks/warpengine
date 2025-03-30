@@ -6,3 +6,5 @@
 #include "FilledRectangle.h"
 #include "PlayerMovement.h"
 #include "Text.h"
+#include "SpriteRenderer.h"
+#include "Triangle.h"

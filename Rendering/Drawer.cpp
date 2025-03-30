@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <asm-generic/errno.h>
 #include <iostream>
 #include <cmath>
 
@@ -26,26 +28,22 @@ void Drawer::drawAll()
 void Drawer::drawLine(Vector2 start, Vector2 end, RGB color, float rotation)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+    start.x = start.x * game->scale.x;
+    start.y = start.y * game->scale.y;
+    end.x = end.x * game->scale.x;
+    end.y = end.y * game->scale.y;
 
-    float centerX = (start.x + end.x) / 2.0f;
-    float centerY = (start.y + end.y) / 2.0f;
+    Vector2 center = {(start.x + end.x) * 0.5f, (start.y + end.y) * 0.5f};
 
-    float translatedStartX = start.x - centerX;
-    float translatedStartY = start.y - centerY;
-    float translatedEndX = end.x - centerX;
-    float translatedEndY = end.y - centerY;
+    start = {
+        (start.x - center.x) * cos(rotation) - (start.y - center.y) * sin(rotation) + center.x,
+        (start.x - center.x) * sin(rotation) + (start.y - center.y) * cos(rotation) + center.y};
 
-    float rotatedStartX = translatedStartX * cos(rotation) - translatedStartY * sin(rotation);
-    float rotatedStartY = translatedStartX * sin(rotation) + translatedStartY * cos(rotation);
-    float rotatedEndX = translatedEndX * cos(rotation) - translatedEndY * sin(rotation);
-    float rotatedEndY = translatedEndX * sin(rotation) + translatedEndY * cos(rotation);
+    end = {
+        (end.x - center.x) * cos(rotation) - (end.y - center.y) * sin(rotation) + center.x,
+        (end.x - center.x) * sin(rotation) + (end.y - center.y) * cos(rotation) + center.y};
 
-    rotatedStartX += centerX;
-    rotatedStartY += centerY;
-    rotatedEndX += centerX;
-    rotatedEndY += centerY;
-
-    SDL_RenderDrawLine(game->renderer, rotatedStartX * game->scale.x, rotatedStartY * game->scale.y, rotatedEndX * game->scale.x, rotatedEndY * game->scale.y);
+    SDL_RenderDrawLine(game->renderer, start.x, start.y, end.x, end.y);
 }
 
 void Drawer::drawRectangle(Vector2 start, Vector2 end, RGB color, float rotation)
@@ -73,10 +71,10 @@ void Drawer::drawRectangle(Vector2 start, Vector2 end, RGB color, float rotation
         corners[i].y = rotatedY + centerY;
     }
 
-    SDL_RenderDrawLine(game->renderer, corners[0].x * game->scale.x, corners[0].y * game->scale.y, corners[1].x * game->scale.x, corners[1].y * game->scale.y);
-    SDL_RenderDrawLine(game->renderer, corners[1].x * game->scale.x, corners[1].y * game->scale.y, corners[2].x * game->scale.x, corners[2].y * game->scale.y);
-    SDL_RenderDrawLine(game->renderer, corners[2].x * game->scale.x, corners[2].y * game->scale.y, corners[3].x * game->scale.x, corners[3].y * game->scale.y);
-    SDL_RenderDrawLine(game->renderer, corners[3].x * game->scale.x, corners[3].y * game->scale.y, corners[0].x * game->scale.x, corners[0].y * game->scale.y);
+    drawLine(corners[0], corners[1], color, 0);
+    drawLine(corners[1], corners[2], color, 0);
+    drawLine(corners[2], corners[3], color, 0);
+    drawLine(corners[3], corners[0], color, 0);
 }
 
 void Drawer::drawFilledRectangle(Vector2 start, Vector2 end, RGB color, float rotation)
@@ -168,7 +166,7 @@ void Drawer::drawFilledEllipse(Vector2 center, Vector2 radius, RGB color, float 
     }
 }
 
-void Drawer::drawText(std::string text, std::string fontPath, int fontSize, Vector2 position, Vector2 scale, RGB rgb)
+void Drawer::drawText(std::string text, std::string fontPath, int fontSize, Vector2 position, Vector2 scale, RGB rgb, float rotation)
 {
     TTF_Init();
     TTF_Font *font = TTF_OpenFont(fontPath.c_str(), fontSize);
@@ -195,9 +193,9 @@ void Drawer::drawText(std::string text, std::string fontPath, int fontSize, Vect
     TTF_CloseFont(font);
 }
 
-void Drawer::drawSprite(std::string imagePath, Vector2 position, Vector2 scale, RGB rgb)
+void Drawer::drawSprite(std::string imagePath, Vector2 position, Vector2 scale, RGB rgb, float rotation)
 {
-    IMG_Init(IMG_INIT_JPG || IMG_INIT_PNG || IMG_INIT_AVIF || IMG_INIT_JXL || IMG_INIT_TIF || IMG_INIT_WEBP);
+    IMG_Init(IMG_INIT_JPG || IMG_INIT_PNG || IMG_INIT_AVIF || IMG_INIT_JXL || IMG_INIT_TIF);
     SDL_Surface *surface = IMG_Load(imagePath.c_str());
     SDL_Texture *tex = SDL_CreateTextureFromSurface(game->renderer, surface);
 
@@ -210,4 +208,60 @@ void Drawer::drawSprite(std::string imagePath, Vector2 position, Vector2 scale, 
     SDL_RenderCopy(game->renderer, tex, NULL, &rect);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(tex);
+}
+
+void Drawer::drawTriangle(Vector2 position, Vector2 scale, RGB color, float rotation)
+{
+    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+
+    position.x = position.x * game->scale.x;
+    position.y = position.y * game->scale.y;
+    scale.x = scale.x * game->scale.x;
+    scale.y = scale.y * game->scale.y;
+
+    Vector2 vertices[3] = {
+        {position.x, position.y - scale.y},
+        {position.x - scale.x, position.y + scale.y},
+        {position.x + scale.x, position.y + scale.y}};
+
+    for (int i = 0; i < 3; ++i)
+    {
+        float translatedX = vertices[i].x - position.x;
+        float translatedY = vertices[i].y - position.y;
+
+        float rotatedX = translatedX * cos(rotation) - translatedY * sin(rotation);
+        float rotatedY = translatedX * sin(rotation) + translatedY * cos(rotation);
+
+        vertices[i].x = rotatedX + position.x;
+        vertices[i].y = rotatedY + position.y;
+    }
+
+    SDL_RenderDrawLine(game->renderer, vertices[0].x, vertices[0].y, vertices[1].x, vertices[1].y);
+    SDL_RenderDrawLine(game->renderer, vertices[1].x, vertices[1].y, vertices[2].x, vertices[2].y);
+    SDL_RenderDrawLine(game->renderer, vertices[2].x, vertices[2].y, vertices[0].x, vertices[0].y);
+}
+
+void Drawer::drawFilledTriangle(Vector2 position, Vector2 scale, RGB color, float rotation)
+{
+    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+    position.x = position.x * game->scale.x;
+    position.y = position.y * game->scale.y;
+    scale.x = scale.x * game->scale.x;
+    scale.y = scale.y * game->scale.y;
+
+    Vector2 vertices[3] = {
+        {position.x, position.y - scale.y},
+        {position.x - scale.x, position.y + scale.y},
+        {position.x + scale.x, position.y + scale.y}};
+
+    SDL_Vertex verts[3];
+    for (int i = 0; i < 3; ++i)
+    {
+        verts[i].position.x = vertices[i].x;
+        verts[i].position.y = vertices[i].y;
+        verts[i].color = {color.r, color.g, color.b, 255};
+    }
+
+    int indices[] = {0, 1, 2};
+    SDL_RenderGeometry(game->renderer, nullptr, verts, 3, indices, 3);
 }
