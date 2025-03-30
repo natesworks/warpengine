@@ -26,6 +26,7 @@ public:
     {
         auto component = new T(this, std::forward<Args>(args)...);
         components.push_back(component);
+        return component;
     }
 
     bool isColliding(Vector2 position);

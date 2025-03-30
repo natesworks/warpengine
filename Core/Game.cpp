@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <string>
 #include <iostream>
@@ -11,7 +12,7 @@
 #include "../Types/Component.h"
 #include "../Types/Keys.h"
 
-Game::Game(int x, int y, int w, int h, std::string title, WindowType windowType)
+Game::Game(int x, int y, int w, int h, std::string title, WindowType windowType) : deltaTime(0)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -86,12 +87,19 @@ void Game::removeEventHandler(EventType eventType, int index)
 
 void Game::gameLoop()
 {
+    uint64_t now = SDL_GetPerformanceCounter();
+    uint64_t last = 0;
     while (true)
     {
     eventhandler:
         drawer->drawAll();
         SDL_Event event;
         SDL_PollEvent(&event);
+
+        last = now;
+        now = SDL_GetPerformanceCounter();
+        deltaTime = ((now - last)*1000 / (double)SDL_GetPerformanceFrequency() );
+
         if (event.type == SDL_QUIT)
         {
             exit(0);
@@ -229,4 +237,9 @@ void Game::handleEvent(Event &event)
             component->onEvent(event);
         }
     }
+}
+
+double Game::getDeltaTime()
+{
+    return deltaTime;
 }

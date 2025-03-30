@@ -42,6 +42,8 @@ public:
 
     int getWindowWidth();
     int getWindowHeight();
+    double getDeltaTime();
+
     void handleEvent(Event &event);
 
     bool togglableFullscreen = true;
@@ -54,6 +56,7 @@ private:
 
     float referenceWidth = 1920.0f;
     float referenceHeight = 1080.0f;
+    double deltaTime;
 
     void gameLoop();
     std::unordered_map<EventType, std::vector<std::function<void(Event &event)>>> eventHandlers;
