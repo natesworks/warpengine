@@ -14,8 +14,12 @@ void Drawer::drawAll()
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
     SDL_RenderClear(game->renderer);
 
-    for (auto &object : game->objects)
+    for (Object *object : game->objects)
     {
+        if (object->getActive() == false)
+        {
+            continue;   
+        }
         for (auto &component : object->components)
         {
             component->draw(object);

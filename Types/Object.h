@@ -36,12 +36,14 @@ public:
     void setScale(Vector2 scale);
     void setRotation(float rotation);
     void setParent(Object* object);
+    void setActive(bool active);
 
     Vector2 getPosition();
     Vector2 getScale();
     float getRotation();
     int getID();
     Object* getParent();
+    bool getActive();
 
     template <typename T>
     T* getComponent()
@@ -69,4 +71,5 @@ private:
     int id;
     Object* parent;
     std::vector<Object*> children;
+    bool active;
 };

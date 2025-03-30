@@ -4,7 +4,7 @@
 #include "EventType.h"
 
 Object::Object(Game *game, Vector2 position, Vector2 scale, float rotation, RGB color)
-    : game(game), position(position), scale(scale), rotation(rotation), color(color), previousPosition(position), id(game->objects.size())
+    : game(game), position(position), scale(scale), rotation(rotation), color(color), previousPosition(position), id(game->objects.size()), active(true)
 {
 }
 
@@ -18,6 +18,9 @@ Object::~Object()
 
 bool Object::isColliding(Vector2 position)
 {
+    if (!active)
+        return false;
+
     int x = this->position.x;
     int y = this->position.y;
     bool isColliding = false;
@@ -32,6 +35,9 @@ bool Object::isColliding(Vector2 position)
 
 bool Object::isColliding(Object *object)
 {
+    if (!active || !object->getActive())
+        return false;
+    
     float x = this->position.x * game->scale.x;
     float y = this->position.y * game->scale.y;
     float x2 = object->position.x * game->scale.x;
@@ -68,10 +74,15 @@ void Object::setRotation(float rotation)
     this->rotation = rotation;
 }
 
-void Object::setParent(Object* object)
+void Object::setParent(Object *object)
 {
     this->parent = object;
     object->children.push_back(this);
+}
+
+void Object::setActive(bool active)
+{
+    this->active = active;
 }
 
 Vector2 Object::getPosition()
@@ -94,12 +105,17 @@ int Object::getID()
     return id;
 }
 
-Object* Object::getParent()
+Object *Object::getParent()
 {
     return parent;
 }
 
-void Object::disown(Object* child)
+bool Object::getActive()
+{
+    return active;
+}
+
+void Object::disown(Object *child)
 {
     children.erase(std::remove(children.begin(), children.end(), child), children.end());
     child->parent = nullptr;
