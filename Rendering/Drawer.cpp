@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <cmath>
 
@@ -139,7 +140,7 @@ void Drawer::drawEllipse(Vector2 center, float radiusX, float radiusY, RGB color
     }
 }
 
-void Drawer::drawFilledEllipse(Vector2 center, int radiusX, int radiusY, RGB color, float rotation)
+void Drawer::drawFilledEllipse(Vector2 center, float radiusX, float radiusY, RGB color, float rotation)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
     for (int y = -radiusY; y <= radiusY; y++)
@@ -161,4 +162,23 @@ void Drawer::drawFilledEllipse(Vector2 center, int radiusX, int radiusY, RGB col
             }
         }
     }
+}
+
+void Drawer::drawText(std::string text, std::string fontPath, int fontSize, Vector2 position, Vector2 scale, RGB rgb)
+{
+    TTF_Font* font = TTF_OpenFont(fontPath.c_str(), fontSize);
+    SDL_Color color = {rgb.r, rgb.g, rgb.b};
+    SDL_Surface *messageSurface = TTF_RenderText_Solid(font, text.c_str(), color); 
+    SDL_Texture* messageTexture = SDL_CreateTextureFromSurface(game->renderer, messageSurface);
+    SDL_Rect messageRect;
+
+    messageRect.x = position.x;
+    messageRect.y = position.y;
+    messageRect.w = scale.x;
+    messageRect.h = scale.y;
+
+    SDL_RenderCopy(game->renderer, messageTexture, NULL, &messageRect);
+    SDL_FreeSurface(messageSurface);
+    SDL_DestroyTexture(messageTexture);
+    TTF_CloseFont(font);
 }

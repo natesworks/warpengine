@@ -2,7 +2,7 @@
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
-#include <string.h>
+#include <string>
 #include <iostream>
 #include <thread>
 
