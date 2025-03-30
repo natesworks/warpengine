@@ -5,3 +5,4 @@
 #include "Object.h"
 #include "RGB.h"
 #include "Vector2.h"
+#include "WindowType.h"

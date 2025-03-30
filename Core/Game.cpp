@@ -11,7 +11,7 @@
 #include "../Types/Component.h"
 #include "../Types/Keys.h"
 
-Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
+Game::Game(int x, int y, int w, int h, std::string title, WindowType windowType)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -19,10 +19,19 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
     }
 
     uint32_t flags = 0;
-    if (borderless)
+    if (windowType == BORDERLESS)
     {
         flags = SDL_WINDOW_BORDERLESS;
     }
+    else if (windowType == FULLSCREEN)
+    {
+        flags = SDL_WINDOW_FULLSCREEN;
+    }
+    else if (windowType == DESKTOPFULLSCREEN)
+    {
+        flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+    }
+    startingWindowType = windowType;
 
     drawer = std::make_unique<Drawer>(this);
     gameWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, flags);
@@ -43,42 +52,6 @@ Game::Game(int x, int y, int w, int h, std::string title, bool borderless)
         throw RendererCreationFailed();
     }
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    if (SDL_RenderClear(renderer) != 0)
-    {
-        throw RenderFailed();
-    }
-    SDL_RenderPresent(renderer);
-}
-
-Game::Game(int w, int h, std::string title, bool borderless) : Game(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, title, borderless) {}
-
-Game::Game(std::string title)
-{
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        throw InitialisationFailed();
-    }
-
-    drawer = std::make_unique<Drawer>(this);
-    gameWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
-    if (!gameWindow)
-    {
-        throw WindowCreationFailed();
-    }
-    SDL_DisplayMode displayMode;
-    if (SDL_GetDesktopDisplayMode(0, &displayMode) != 0)
-    {
-        throw WindowCreationFailed();
-    }
-    scale.x = displayMode.w / referenceWidth;
-    scale.y = displayMode.h / referenceHeight;
-    SDL_SetWindowResizable(gameWindow, SDL_TRUE);
-    renderer = SDL_CreateRenderer(gameWindow, -1, 0);
-    if (!renderer)
-    {
-        throw RendererCreationFailed();
-    }
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     if (SDL_RenderClear(renderer) != 0)
     {
@@ -146,7 +119,33 @@ void Game::gameLoop()
                 handleEvent(e);
                 if (togglableFullscreen && event.key.keysym.sym == SDLK_F11)
                 {
-                    SDL_SetWindowFullscreen(gameWindow, SDL_GetWindowFlags(gameWindow) ^ SDL_WINDOW_FULLSCREEN_DESKTOP);
+                    uint32_t flags = SDL_GetWindowFlags(gameWindow);
+                    if (flags & SDL_WINDOW_FULLSCREEN_DESKTOP || (flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == SDL_WINDOW_FULLSCREEN_DESKTOP)
+                    {
+                        if (startingWindowType == WINDOWED)
+                        {
+                            SDL_SetWindowBordered(gameWindow, SDL_TRUE);
+                        }
+                        else if (startingWindowType == BORDERLESS)
+                        {
+                            SDL_SetWindowBordered(gameWindow, SDL_FALSE);
+                        }
+                        SDL_SetWindowFullscreen(gameWindow, 0);
+                        SDL_SetWindowResizable(gameWindow, SDL_TRUE);
+                    }
+                    else
+                    {
+                        uint32_t fullscreenType;
+                        if (startingWindowType == FULLSCREEN)
+                        {
+                            fullscreenType = SDL_WINDOW_FULLSCREEN;
+                        }
+                        else
+                        {
+                            fullscreenType = SDL_WINDOW_FULLSCREEN_DESKTOP;
+                        }
+                        SDL_SetWindowFullscreen(gameWindow, fullscreenType);
+                    }
                 }
             }
         }

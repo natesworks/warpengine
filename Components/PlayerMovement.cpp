@@ -41,8 +41,3 @@ void PlayerMovement::onEvent(Event &event)
         }
     }
 }
-
-std::unique_ptr<Component> PlayerMovement::clone() const
-{
-    return std::make_unique<PlayerMovement>(*this);
-}

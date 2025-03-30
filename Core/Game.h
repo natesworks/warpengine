@@ -12,6 +12,8 @@
 #include "../Rendering/Drawer.h"
 #include "../Types/Event.h"
 #include "../Types/Vector2.h"
+#include "../Types/WindowType.h"
+#include "../Types/WindowType.h"
 
 class Object;
 class Drawer;
@@ -24,9 +26,7 @@ public:
     Vector2 scale;
     std::unique_ptr<Drawer> drawer;
 
-    Game(int x, int y, int w, int h, std::string title = "Game", bool borderless = false);
-    Game(int w, int h, std::string title = "Game", bool borderless = false);
-    Game(std::string title = "Game");
+    Game(int x, int y, int w, int h, std::string title = "Game", WindowType windowType = WINDOWED);
     ~Game();
 
     template <typename... Args>
@@ -57,6 +57,7 @@ private:
 
     void gameLoop();
     std::unordered_map<EventType, std::vector<std::function<void(Event &event)>>> eventHandlers;
+    WindowType startingWindowType;
 };
 
 class InitialisationFailed
