@@ -17,8 +17,8 @@ public:
     void drawLine(Vector2 start, Vector2 end, RGB color, float rotation = 0);
     void drawRectangle(Vector2 start, Vector2 end, RGB color, float rotation = 0);
     void drawFilledRectangle(Vector2 start, Vector2 end, RGB color, float rotation = 0);
-    void drawEllipse(Vector2 center, float radiusX, float radiusY, RGB color, float rotation = 0);
-    void drawFilledEllipse(Vector2 center, float radiusX, float radiusY, RGB color, float rotation = 0);
+    void drawEllipse(Vector2 center, Vector2 radius, RGB color, float rotation = 0);
+    void drawFilledEllipse(Vector2 center, Vector2 radius, RGB color, float rotation = 0);
     void drawText(std::string text, std::string font, int fontSize, Vector2 position, Vector2 scale, RGB color);
 
 private:

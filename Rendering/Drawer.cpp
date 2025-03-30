@@ -51,8 +51,8 @@ void Drawer::drawRectangle(Vector2 start, Vector2 end, RGB color, float rotation
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
 
-    float centerX = (start.x + end.x) / 2.0f;
-    float centerY = (start.y + end.y) / 2.0f;
+    float centerX = (start.x + end.x) * game->scale.x;
+    float centerY = (start.y + end.y) * game->scale.y;
 
     Vector2 corners[4] = {
         {start.x, start.y},
@@ -83,8 +83,8 @@ void Drawer::drawFilledRectangle(Vector2 start, Vector2 end, RGB color, float ro
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
 
-    float centerX = (start.x + end.x) / 2.0f;
-    float centerY = (start.y + end.y) / 2.0f;
+    float centerX = (start.x + end.x) * game->scale.x;
+    float centerY = (start.y + end.y) * game->scale.y;
 
     Vector2 corners[4] = 
     {
@@ -118,39 +118,44 @@ void Drawer::drawFilledRectangle(Vector2 start, Vector2 end, RGB color, float ro
     SDL_RenderGeometry(game->renderer, nullptr, verts, 4, indices, 6);
 }
 
-void Drawer::drawEllipse(Vector2 center, float radiusX, float radiusY, RGB color, float rotation)
+void Drawer::drawEllipse(Vector2 center, Vector2 radius, RGB color, float rotation)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
+    radius.x = radius.x * game->scale.x;
+    radius.y = radius.y * game->scale.y;
+    center.x = center.x * game->scale.x;
+    center.y = center.y * game->scale.y;
     for (int i = 0; i < 360; i++)
     {
         double angle = i * M_PI / 180.0;
         float cosRotation = cos(rotation);
         float sinRotation = sin(rotation);
 
-        float x = radiusX * cosRotation * game->scale.x;
-        float y = radiusY * sinRotation * game->scale.y;
+        float x = (radius.x * cosRotation * game->scale.x);
+        float y = (radius.y * sinRotation * game->scale.y);
 
-        float translatedX = x * game->scale.x;
-        float translatedY = y * game->scale.y;
+        x = x * cosRotation - y * sinRotation;
+        y = x * sinRotation + y * cosRotation;
 
-        float rotatedX = translatedX * cosRotation - translatedY * sinRotation;
-        float rotatedY = translatedX * sinRotation + translatedY * cosRotation;
-
-        SDL_RenderDrawPoint(game->renderer, center.x * game->scale.x + rotatedX, center.y * game->scale.y + rotatedY);
+        SDL_RenderDrawPoint(game->renderer, center.x + x, center.y + y);
     }
 }
 
-void Drawer::drawFilledEllipse(Vector2 center, float radiusX, float radiusY, RGB color, float rotation)
+void Drawer::drawFilledEllipse(Vector2 center, Vector2 radius, RGB color, float rotation)
 {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
-    for (int y = -radiusY; y <= radiusY; y++)
+    radius.x = radius.x * game->scale.x;
+    radius.y = radius.y * game->scale.y;
+    center.x = center.x * game->scale.x;
+    center.y = center.y * game->scale.y;
+    for (int y = -radius.y; y <= radius.y; y++)
     {
-        for (int x = -radiusX; x <= radiusX; x++)
+        for (int x = -radius.x; x <= radius.x; x++)
         {
-            if ((x * x * radiusY * radiusY + y * y * radiusX * radiusX) <= (radiusX * radiusX * radiusY * radiusY))
+            if ((x * x * radius.y * radius.y + y * y * radius.x * radius.x) <= (radius.x * radius.x * radius.y * radius.y))
             {
-                float translatedX = x * game->scale.x;
-                float translatedY = y * game->scale.y;
+                float translatedX = x ;
+                float translatedY = y;
 
                 float cosRotation = cos(rotation);
                 float sinRotation = sin(rotation);
@@ -158,7 +163,7 @@ void Drawer::drawFilledEllipse(Vector2 center, float radiusX, float radiusY, RGB
                 float rotatedX = translatedX * cosRotation - translatedY * sinRotation;
                 float rotatedY = translatedX * sinRotation + translatedY * cosRotation;
 
-                SDL_RenderDrawPoint(game->renderer, center.x * game->scale.x + rotatedX, center.y * game->scale.y + rotatedY);
+                SDL_RenderDrawPoint(game->renderer, center.x + rotatedX, center.y + rotatedY);
             }
         }
     }
@@ -180,10 +185,10 @@ void Drawer::drawText(std::string text, std::string fontPath, int fontSize, Vect
     SDL_Texture* messageTexture = SDL_CreateTextureFromSurface(game->renderer, messageSurface);
     SDL_Rect messageRect;
 
-    messageRect.x = position.x;
-    messageRect.y = position.y;
-    messageRect.w = scale.x;
-    messageRect.h = scale.y;
+    messageRect.x = position.x * game->scale.x;
+    messageRect.y = position.y * game->scale.y;
+    messageRect.w = scale.x * game->scale.x;
+    messageRect.h = scale.y * game->scale.y;
 
     SDL_RenderCopy(game->renderer, messageTexture, NULL, &messageRect);
     SDL_FreeSurface(messageSurface);
