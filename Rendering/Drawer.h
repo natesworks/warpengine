@@ -20,6 +20,7 @@ public:
     void drawEllipse(Vector2 center, Vector2 radius, RGB color, float rotation = 0);
     void drawFilledEllipse(Vector2 center, Vector2 radius, RGB color, float rotation = 0);
     void drawText(std::string text, std::string font, int fontSize, Vector2 position, Vector2 scale, RGB color);
+    void drawSprite(std::string image, Vector2 position, Vector2 scale, RGB color);
 
 private:
     Game *game;

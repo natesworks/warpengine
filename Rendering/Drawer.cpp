@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <cmath>
 
@@ -58,8 +59,7 @@ void Drawer::drawRectangle(Vector2 start, Vector2 end, RGB color, float rotation
         {start.x, start.y},
         {end.x, start.y},
         {end.x, end.y},
-        {start.x, end.y}
-    };
+        {start.x, end.y}};
 
     for (int i = 0; i < 4; ++i)
     {
@@ -86,13 +86,12 @@ void Drawer::drawFilledRectangle(Vector2 start, Vector2 end, RGB color, float ro
     float centerX = (start.x + end.x) * game->scale.x;
     float centerY = (start.y + end.y) * game->scale.y;
 
-    Vector2 corners[4] = 
-    {
-        {start.x, start.y},
-        {end.x, start.y},
-        {end.x, end.y},
-        {start.x, end.y}
-    };
+    Vector2 corners[4] =
+        {
+            {start.x, start.y},
+            {end.x, start.y},
+            {end.x, end.y},
+            {start.x, end.y}};
 
     for (int i = 0; i < 4; ++i)
     {
@@ -154,7 +153,7 @@ void Drawer::drawFilledEllipse(Vector2 center, Vector2 radius, RGB color, float 
         {
             if ((x * x * radius.y * radius.y + y * y * radius.x * radius.x) <= (radius.x * radius.x * radius.y * radius.y))
             {
-                float translatedX = x ;
+                float translatedX = x;
                 float translatedY = y;
 
                 float cosRotation = cos(rotation);
@@ -172,7 +171,7 @@ void Drawer::drawFilledEllipse(Vector2 center, Vector2 radius, RGB color, float 
 void Drawer::drawText(std::string text, std::string fontPath, int fontSize, Vector2 position, Vector2 scale, RGB rgb)
 {
     TTF_Init();
-    TTF_Font* font = TTF_OpenFont(fontPath.c_str(), fontSize);
+    TTF_Font *font = TTF_OpenFont(fontPath.c_str(), fontSize);
     if (font == NULL)
     {
         std::cerr << "Failed to open font\n";
@@ -181,8 +180,8 @@ void Drawer::drawText(std::string text, std::string fontPath, int fontSize, Vect
     }
 
     SDL_Color color = {rgb.r, rgb.g, rgb.b};
-    SDL_Surface *messageSurface = TTF_RenderText_Solid(font, text.c_str(), color); 
-    SDL_Texture* messageTexture = SDL_CreateTextureFromSurface(game->renderer, messageSurface);
+    SDL_Surface *messageSurface = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Texture *messageTexture = SDL_CreateTextureFromSurface(game->renderer, messageSurface);
     SDL_Rect messageRect;
 
     messageRect.x = position.x * game->scale.x;
@@ -194,4 +193,21 @@ void Drawer::drawText(std::string text, std::string fontPath, int fontSize, Vect
     SDL_FreeSurface(messageSurface);
     SDL_DestroyTexture(messageTexture);
     TTF_CloseFont(font);
+}
+
+void Drawer::drawSprite(std::string imagePath, Vector2 position, Vector2 scale, RGB rgb)
+{
+    IMG_Init(IMG_INIT_JPG || IMG_INIT_PNG || IMG_INIT_AVIF || IMG_INIT_JXL || IMG_INIT_TIF || IMG_INIT_WEBP);
+    SDL_Surface *surface = IMG_Load(imagePath.c_str());
+    SDL_Texture *tex = SDL_CreateTextureFromSurface(game->renderer, surface);
+
+    SDL_Rect rect;
+    rect.x = position.x * game->scale.x;
+    rect.y = position.y * game->scale.y;
+    rect.w = scale.x * game->scale.x;
+    rect.h = scale.x * game->scale.y;
+
+    SDL_RenderCopy(game->renderer, tex, NULL, &rect);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(tex);
 }
