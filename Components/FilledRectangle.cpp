@@ -14,5 +14,5 @@ FilledRectangle::~FilledRectangle()
 
 void FilledRectangle::draw(Object *object)
 {
-    object->game->drawer->drawFilledRectangle(Vector2(object->getPosition().x, object->getPosition().y), Vector2(object->getPosition().x + object->getScale().x, object->getPosition().y + object->getScale().y), object->color, object->getRotation());
+    object->game->drawer->drawFilledRectangle(object->getPosition(), Vector2(object->getPosition().x + object->getScale().x, object->getPosition().y + object->getScale().y), object->color, object->getRotation());
 }
