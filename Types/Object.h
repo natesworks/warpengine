@@ -19,6 +19,7 @@ public:
     std::vector<Component *> components;
     RGB color;
     Game *game;
+    Vector2 previousPosition;
 
     template <typename T, typename... Args>
     Component *addComponent(Args &&...args)
@@ -33,13 +34,14 @@ public:
     void setPosition(Vector2 position);
     void setScale(Vector2 scale);
     void setRotation(float rotation);
+    void setParent(Object* object);
 
     Vector2 getPosition();
     Vector2 getScale();
     float getRotation();
     int getID();
-
-    Vector2 previousPosition;
+    Object* getParent();
+    void disown(Object* child);
 
     Object(Game *game, Vector2 position, Vector2 scale, float rotation, RGB color);
     ~Object();
@@ -51,4 +53,6 @@ private:
     Vector2 scale;
     float rotation;
     int id;
+    Object* parent;
+    std::vector<Object*> children;
 };

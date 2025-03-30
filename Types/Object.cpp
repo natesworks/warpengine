@@ -68,6 +68,12 @@ void Object::setRotation(float rotation)
     this->rotation = rotation;
 }
 
+void Object::setParent(Object* object)
+{
+    this->parent = object;
+    object->children.push_back(this);
+}
+
 Vector2 Object::getPosition()
 {
     return position;
@@ -86,6 +92,17 @@ float Object::getRotation()
 int Object::getID()
 {
     return id;
+}
+
+Object* Object::getParent()
+{
+    return parent;
+}
+
+void Object::disown(Object* child)
+{
+    children.erase(std::remove(children.begin(), children.end(), child), children.end());
+    child->parent = nullptr;
 }
 
 bool Object::operator!=(const Object &other) const
