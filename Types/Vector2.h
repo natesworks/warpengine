@@ -1,5 +1,7 @@
 #pragma once
 
+#include <math.h>
+
 class Vector2
 {
 public:
@@ -8,7 +10,7 @@ public:
     Vector2(float x, float y) : x(x), y(y) {};
     Vector2() : x(0), y(0) {};
 
-    Vector2 operator-(const Vector2& other) const
+    Vector2 operator-(const Vector2 &other) const
     {
         return Vector2(x - other.x, y - other.y);
     }
@@ -16,7 +18,7 @@ public:
     {
         return Vector2(x - num, y - num);
     }
-    Vector2 operator+(const Vector2& other) const
+    Vector2 operator+(const Vector2 &other) const
     {
         return Vector2(x + other.x, y + other.y);
     }
@@ -24,49 +26,49 @@ public:
     {
         return Vector2(x + num, y + num);
     }
-    Vector2& operator+=(const Vector2& other)
+    Vector2 &operator+=(const Vector2 &other)
     {
         x += other.x;
         y += other.y;
         return *this;
     }
-    Vector2& operator+=(const float num)
+    Vector2 &operator+=(const float num)
     {
         x += num;
         y += num;
         return *this;
     }
-    Vector2& operator-=(const Vector2& other)
+    Vector2 &operator-=(const Vector2 &other)
     {
         x -= other.x;
         y -= other.y;
         return *this;
     }
-    Vector2& operator-=(const float num)
+    Vector2 &operator-=(const float num)
     {
         x -= num;
         y -= num;
         return *this;
     }
-    Vector2& operator*=(const Vector2& other)
+    Vector2 &operator*=(const Vector2 &other)
     {
         x *= other.x;
         y *= other.y;
         return *this;
     }
-    Vector2& operator*=(const float num)
+    Vector2 &operator*=(const float num)
     {
         x *= num;
         y *= num;
         return *this;
     }
-    Vector2& operator/=(const Vector2& other)
+    Vector2 &operator/=(const Vector2 &other)
     {
         x /= other.x;
         y /= other.y;
         return *this;
     }
-    Vector2& operator/=(const float num)
+    Vector2 &operator/=(const float num)
     {
         x /= num;
         y /= num;
@@ -78,7 +80,7 @@ public:
     }
     Vector2 operator*(const float num) const
     {
-        return Vector2(x - num, y - num);
+        return Vector2(x * num, y * num);
     }
     Vector2 operator/(const Vector2 other) const
     {
@@ -87,5 +89,16 @@ public:
     Vector2 operator/(const float num) const
     {
         return Vector2(x / num, y / num);
+    }
+    Vector2 operator==(const Vector2 other) const
+    {
+        return Vector2(x == other.x, y == other.y);
+    }
+    Vector2 normalised()
+    {
+        float length = sqrt(x * x + y * y);
+        if (length == 0)
+            return Vector2(0, 0);
+        return Vector2(x / length, y / length);
     }
 };
