@@ -10,22 +10,47 @@ void Collider::setOnTriggerEnter(std::function<void()> onTriggerEnter)
     this->onTriggerEnter = onTriggerEnter;
 }
 
-void Collider::callOnTriggerEnter(Object &object)
+void Collider::callOnTriggerEnter(Object *collider)
 {
-    for (Component* component : object.components)
+    for (Component *component : object->components)
     {
-        Collider* collider = dynamic_cast<Collider*>(component);
+        Collider *colliderComponent = dynamic_cast<Collider *>(component);
 
-        if (collider != nullptr)
+        if (colliderComponent != nullptr)
         {
-            if (collider->onTriggerEnter != nullptr)
+            if (colliderComponent->onTriggerEnter != nullptr)
             {
-                collider->onTriggerEnter();
+                colliderComponent->onTriggerEnter();
             }
             else
             {
-                this->object->setPosition(this->object->previousPosition);
+                collider->findSafePosition();
             }
         }
     }
+}
+
+bool Collider::callIsColliding(Object *collider)
+{
+    for (Component *component : object->components)
+    {
+        Collider *colliderComponent = dynamic_cast<Collider *>(component);
+
+        if (colliderComponent != nullptr)
+        {
+            return colliderComponent->isColliding(collider);
+        }
+    }
+
+    return false;
+}
+
+bool Collider::isColliding(Object *object)
+{
+    return false;
+}
+
+bool Collider::isColliding(Rect rect)
+{
+    return false;
 }

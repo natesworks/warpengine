@@ -5,10 +5,11 @@
 #include <iostream>
 #include <cmath>
 
-#include "../Types/Component.h"
+#include "Component.h"
 #include "Vector2.h"
 #include "../Core/Game.h"
-#include "../Types/RGB.h"
+#include "RGB.h"
+#include "Rect.h"
 
 class Game;
 class Component;
@@ -19,7 +20,6 @@ public:
     std::vector<Component *> components;
     RGB color;
     Game *game;
-    Vector2 previousPosition;
 
     template <typename T, typename... Args>
     Component *addComponent(Args &&...args)
@@ -29,14 +29,15 @@ public:
         return component;
     }
 
-    bool isColliding(Vector2 position);
-    bool isColliding(Object *object);
+    bool isOverlapping(Vector2 position);
+    bool isColliding();
 
     void setPosition(Vector2 position);
     void setScale(Vector2 scale);
     void setRotation(float rotation);
     void setParent(Object* object);
     void setActive(bool active);
+    void findSafePosition();
 
     Vector2 getPosition();
     Vector2 getScale();

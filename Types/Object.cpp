@@ -2,9 +2,11 @@
 #include "../Core/Game.h"
 #include "Event.h"
 #include "EventType.h"
+#include "../Components/Collider.h"
+#include "Component.h"
 
 Object::Object(Game *game, Vector2 position, Vector2 scale, float rotation, RGB color)
-    : game(game), position(position), scale(scale), rotation(rotation), color(color), previousPosition(position), id(game->objects.size()), active(true)
+    : game(game), position(position), scale(scale), rotation(rotation), color(color), id(game->objects.size()), active(true)
 {
 }
 
@@ -16,62 +18,54 @@ Object::~Object()
     }
 }
 
-bool Object::isColliding(Vector2 position)
+/**
+ * @brief Checks if position overlaps with object
+ * TODO Take rotation into account
+ */
+bool Object::isOverlapping(Vector2 position)
 {
     if (!active)
         return false;
 
-    int x = this->position.x;
-    int y = this->position.y;
-    bool isColliding = false;
+    position = position * game->scale;
+    Vector2 position2 = this->position * game->scale;
 
-    if (position.x > x * game->scale.x && position.x < x * game->scale.x + scale.x && position.y > y * game->scale.y && position.y < y * game->scale.y + scale.y)
+    if (position.x > position2.x && position.x < position2.x + scale.x && position.y > position2.y && position.y < position2.y + scale.y)
     {
-        isColliding = true;
+        return true;
     }
 
-    return isColliding;
-}
-
-bool Object::isColliding(Object *object)
-{
-    if (!active || !object->getActive())
-        return false;
-    
-    float x = this->position.x * game->scale.x;
-    float y = this->position.y * game->scale.y;
-    float x2 = object->position.x * game->scale.x;
-    float y2 = object->position.y * game->scale.y;
-
-    float w1 = this->scale.x * game->scale.x;
-    float w2 = object->scale.x * game->scale.x;
-    float h1 = this->scale.y * game->scale.y;
-    float h2 = object->scale.y * game->scale.y;
-
-    return (x < x2 + w2 &&
-            x + w1 > x2 &&
-            y < y2 + h2 &&
-            y + h1 > y2);
+    return false;
 }
 
 void Object::setPosition(Vector2 position)
 {
-    previousPosition = this->position;
-    this->position = position;
     Event e(OBJECTPOSITIONCHANGED);
     e.object = this;
+    e.previousPosition = this->position;
+    this->position = position;
 
     game->handleEvent(e);
 }
 
 void Object::setScale(Vector2 scale)
 {
+    Event e(OBJECTSCALECHANGED);
+    e.object = this;
+    e.previousScale = this->scale;
     this->scale = scale;
+
+    game->handleEvent(e);
 }
 
 void Object::setRotation(float rotation)
 {
+    Event e(OBJECTROTATIONCHANGED);
+    e.object = this;
+    e.previousRotation = this->rotation;
     this->rotation = rotation;
+
+    game->handleEvent(e);
 }
 
 void Object::setParent(Object *object)
@@ -124,4 +118,70 @@ void Object::disown(Object *child)
 bool Object::operator!=(const Object &other) const
 {
     return this != &other;
+}
+
+bool Object::isColliding()
+{
+    for (Object *object : game->objects)
+    {
+        if (*object != *this && object->active)
+        {
+            for (Component *component : components)
+            {
+                Collider *collider = dynamic_cast<Collider *>(component);
+                if (collider != nullptr && collider->isColliding(object))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * @brief Finds the closest ("safe") position not inside collider and moves the object to there
+ */
+void Object::findSafePosition()
+{
+    Collider *collider = nullptr;
+
+    for (Component *component : components)
+    {
+        Collider *foundCollider = dynamic_cast<Collider *>(component);
+        if (foundCollider != nullptr)
+        {
+            collider = foundCollider;
+            break;
+        }
+    }
+
+    if (collider == nullptr || !isColliding())
+    {
+        return;
+    }
+
+    float step = 1.0f;
+
+    while (true)
+    {
+        for (float angle = 0.0f; angle < 360.0f; angle += 10.0f)
+        {
+            float radian = angle * (M_PI / 180.0f);
+            Vector2 offset(step * cos(radian), step * sin(radian));
+            
+            Rect testRect = Rect(position.x + offset.x,
+                                 position.y + offset.y,
+                                 scale.x, scale.y);
+
+            if (!collider->isColliding(testRect))
+            {
+                std::cout << step << "\n";
+                position += offset;        
+                findSafePosition();  
+                return;
+            }
+        }
+        step += 0.1f;
+    }
 }

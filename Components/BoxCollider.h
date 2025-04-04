@@ -13,4 +13,6 @@ public:
     ~BoxCollider();
     void draw(Object *object) override;
     void onEvent(Event &event) override;
+    bool isColliding(Rect rect) override;
+    bool isColliding(Object *object) override;
 };

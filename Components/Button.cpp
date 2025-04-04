@@ -19,7 +19,7 @@ void Button::draw(Object *object)
 
 void Button::onEvent(Event &event)
 {
-    if (event.type == EventType::MOUSEBUTTONDOWN && onClickFunction && object->isColliding(event.mousePosition))
+    if (event.type == EventType::MOUSEBUTTONDOWN && onClickFunction && object->isOverlapping(event.mousePosition))
     {
         onClickFunction();
     }

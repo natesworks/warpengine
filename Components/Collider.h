@@ -13,9 +13,12 @@ public:
     virtual ~Collider() = default;
 
     void setOnTriggerEnter(std::function<void()> onTriggerEnter = nullptr);
+    void callOnTriggerEnter(Object *collider);
+    bool callIsColliding(Object *collider);
+    virtual bool isColliding(Object *object);
+    virtual bool isColliding(Rect rect);
 
     Object *object;
     std::function<void()> onTriggerEnter;
 
-    void callOnTriggerEnter(Object &object);
 };

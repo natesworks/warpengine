@@ -12,11 +12,14 @@ class Event
 {
 public:
     EventType type;
-    uint8_t *key; // only for KEYDOWN and KEYUP
+    uint8_t *key; // for KEYDOWN and KEYUP
     uint8_t mouseButton;
-    Vector2 mousePosition; // only for MOUSEMOTION
-    Vector2 mouseWheel; // only for MOUSEWHEEL
-    Object* object; // only for OBJECTPOSITIONCHANGED
+    Vector2 mousePosition; // for MOUSEMOTION
+    Vector2 mouseWheel; // for MOUSEWHEEL
+    Object* object; // for object attribute changes
+    Vector2 previousPosition; // for OBJECTPOSITIONCHANGED
+    Vector2 previousScale; // for OBJECTSCALECHANGED
+    float previousRotation; // for OBJECTROTATIONCHANGES
     Event (EventType type) : type(type) {}
     Event () {}
 };
