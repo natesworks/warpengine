@@ -161,7 +161,7 @@ void Object::findSafePosition()
         return;
     }
 
-    float step = 1.0f;
+    float step = 0.1f;
 
     while (true)
     {
@@ -176,7 +176,6 @@ void Object::findSafePosition()
 
             if (!collider->isColliding(testRect))
             {
-                std::cout << step << "\n";
                 position += offset;        
                 findSafePosition();  
                 return;
