@@ -12,6 +12,9 @@
 #include "../Types/Component.h"
 #include "../Types/Keys.h"
 
+/** 
+ * TODO Completly rework constructor
+*/
 Game::Game(int x, int y, int w, int h, std::string title, WindowType windowType) : deltaTime(0)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
