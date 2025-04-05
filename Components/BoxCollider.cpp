@@ -28,8 +28,8 @@ void BoxCollider::onEvent(Event &event)
 
 bool BoxCollider::isColliding(Rect rect)
 {
-    Rect rect2 = Rect(object->getPosition().x + object->getScale().x,
-                      object->getPosition().y + object->getScale().y,
+    Rect rect2 = Rect(object->getPosition().x,
+                      object->getPosition().y,
                       object->getScale().x, object->getScale().y);
 
     bool isColliding = rect.x < rect2.x + rect2.w &&
@@ -42,8 +42,8 @@ bool BoxCollider::isColliding(Rect rect)
 
 bool BoxCollider::isColliding(Object *object)
 {
-    Rect rect = Rect(object->getPosition().x + object->getScale().x,
-                     object->getPosition().y + object->getScale().y,
+    Rect rect = Rect(object->getPosition().x,
+                     object->getPosition().y,
                      object->getScale().x, object->getScale().y);
     return isColliding(rect);
 }
