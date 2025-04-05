@@ -196,7 +196,7 @@ bool Object::isColliding()
 }
 
 /**
- * @brief Finds the closest ("safe") position not inside collider and moves the object to there
+ * @brief Finds the closest ("safe") position not inside collider and moves the object there
  */
 void Object::findSafePosition()
 {
@@ -221,84 +221,34 @@ void Object::findSafePosition()
 
     while (true)
     {
-        for (float angle = 0.0f; angle < 360.0f; angle += 10.0f)
+        Rect testRectX = Rect(position.x + step, position.y, scale.x, scale.y);
+        if (!isColliding(testRectX))
         {
-            float radian = angle * (M_PI / 180.0f);
-            Vector2 offset(step * cos(radian), step * sin(radian));
-
-            Rect testRect = Rect(position.x, position.y, scale.x, scale.y);
-            testRect.x += offset.x;
-
-            if (!isColliding(testRect))
-            {
-                position.x += offset.x;
-                return;
-            }
-
-            testRect.y += offset.y;
-
-            if (!isColliding(testRect))
-            {
-                position.y += offset.y;
-                return;
-            }
-
-            testRect.x -= offset.x;
-
-            if (!isColliding(testRect))
-            {
-                position.x -= offset.x;
-                return;
-            }
-
-            testRect.y -= offset.y;
-
-            if (!isColliding(testRect))
-            {
-                position.y -= offset.y;
-                return;
-            }
-
-            testRect.x += offset.x;
-            testRect.y += offset.y;
-
-            if (!isColliding(testRect))
-            {
-                position.x += offset.x;
-                position.y += offset.y;
-                return;
-            }
-
-            testRect.x -= offset.x;
-            testRect.y -= offset.y;
-
-            if (!isColliding(testRect))
-            {
-                position.x -= offset.x;
-                position.y -= offset.y;
-                return;
-            }
-
-            testRect.x += offset.x;
-            testRect.y -= offset.y;
-
-            if (!isColliding(testRect))
-            {
-                position.x += offset.x;
-                position.y -= offset.y;
-                return;
-            }
-
-            testRect.x -= offset.x;
-            testRect.y += offset.y;
-
-            if (!isColliding(testRect))
-            {
-                position.x -= offset.x;
-                position.y += offset.y;
-                return;
-            }
+            position.x += step;
+            return;
         }
+
+        testRectX = Rect(position.x - step, position.y, scale.x, scale.y);
+        if (!isColliding(testRectX))
+        {
+            position.x -= step;
+            return;
+        }
+
+        Rect testRectY = Rect(position.x, position.y + step, scale.x, scale.y);
+        if (!isColliding(testRectY))
+        {
+            position.y += step;
+            return;
+        }
+
+        testRectY = Rect(position.x, position.y - step, scale.x, scale.y);
+        if (!isColliding(testRectY))
+        {
+            position.y -= step;
+            return;
+        }
+
         step += 0.1f;
     }
 }
