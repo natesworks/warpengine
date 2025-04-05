@@ -11,9 +11,9 @@ find_package(SDL2_image REQUIRED)
 
 file(GLOB_RECURSE SRC
     "src/Components/**/*.cpp"
-    "src/Core/**/*.cpp"
-    "src/Rendering/**/*.cpp"
-    "src/Types/**/*.cpp"
+    "src/Core/*.cpp"
+    "src/Rendering/*.cpp"
+    "src/Types/*.cpp"
     "src/WarpEngine.h"
 )
 
