@@ -10,12 +10,8 @@
 #include "Game.h"
 #include "../Rendering/Drawer.h"
 #include "../Types/Component.h"
-#include "../Types/Keys.h"
 
-/** 
- * TODO Completly rework constructor
-*/
-Game::Game(int x, int y, int w, int h, std::string title, WindowType windowType) : deltaTime(0)
+Game::Game(int x, int y, int w, int h, std::string title, WindowType windowType) : deltaTime(0), windowSettings(x, y, w, h, title, windowType)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -43,10 +39,8 @@ Game::Game(int x, int y, int w, int h, std::string title, WindowType windowType)
     {
         throw WindowCreationFailed();
     }
-    width = w;
-    height = h;
-    scale.x = w / referenceWidth;
-    scale.y = h / referenceHeight;
+    scale.x = (float)w / (float)windowSettings.referenceWidth;
+    scale.y = (float)h / (float)windowSettings.referenceHeight;
     SDL_SetWindowResizable(gameWindow, SDL_TRUE);
     renderer = SDL_CreateRenderer(gameWindow, -1, 0);
 
@@ -114,13 +108,13 @@ void Game::gameLoop()
         {
             if (event.window.event == SDL_WINDOWEVENT_RESIZED)
             {
-                SDL_GetWindowSize(gameWindow, &width, &height);
+                SDL_GetWindowSize(gameWindow, &windowSettings.w, &windowSettings.h);
 
-                SDL_Rect newViewport = {0, 0, width, height};
+                SDL_Rect newViewport = {0, 0, windowSettings.w, windowSettings.h};
                 SDL_RenderSetViewport(renderer, &newViewport);
 
-                scale.x = (float)width / referenceWidth;
-                scale.y = (float)height / referenceHeight;
+                scale.x = (float)windowSettings.w / (float)windowSettings.referenceWidth;
+                scale.y = (float)windowSettings.h / (float)windowSettings.referenceHeight;
             }
         }
         else if (event.type == SDL_KEYDOWN)
@@ -219,19 +213,19 @@ void Game::start()
 
 int Game::getWindowWidth()
 {
-    return width;
+    return windowSettings.w;
 }
 
 int Game::getWindowHeight()
 {
-    return height;
+    return windowSettings.h;
 }
 
 void Game::handleEvent(Event &event)
 {
     if (eventHandlers.find(event.type) != eventHandlers.end())
     {
-        for (std::function<void(Event & event)> handler : eventHandlers[event.type])
+        for (std::function<void(Event &event)> handler : eventHandlers[event.type])
         {
             handler(event);
         }

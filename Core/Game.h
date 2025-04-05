@@ -14,6 +14,7 @@
 #include "../Types/Vector2.h"
 #include "../Types/WindowType.h"
 #include "../Types/WindowType.h"
+#include "../Types/WindowSettings.h"
 
 class Object;
 class Drawer;
@@ -49,14 +50,11 @@ public:
 
     bool togglableFullscreen = true;
     std::vector<Object *> objects;
+    WindowSettings windowSettings;
 
 private:
     SDL_Window *gameWindow = nullptr;
-    int width;
-    int height;
 
-    float referenceWidth = 1920.0f;
-    float referenceHeight = 1080.0f;
     double deltaTime;
     double fps;
 
