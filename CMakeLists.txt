@@ -14,6 +14,7 @@ file(GLOB_RECURSE SRC
     "src/Core/**/*.cpp"
     "src/Rendering/**/*.cpp"
     "src/Types/**/*.cpp"
+    "src/WarpEngine.h"
 )
 
 add_library(warpengine SHARED ${SRC})
