@@ -11,5 +11,5 @@ FilledEllipse::~FilledEllipse()
 
 void FilledEllipse::draw(Object *object)
 {
-    object->game->drawer->drawFilledEllipse(Vector2(object->getPosition().x + object->getScale().x, object->getPosition().y + object->getScale().y), object->getScale(), object->color, object->getRotation());
+    object->game->drawer->drawFilledEllipse(object->getCenter(), object->getScale() / 2, object->color, object->getRotation());
 }

@@ -14,7 +14,6 @@ void Drawer::drawAll()
 {
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
     SDL_RenderClear(game->renderer);
-
     
     for (Object *object : game->getActiveScene()->getObjects())
     {
