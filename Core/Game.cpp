@@ -162,6 +162,8 @@ void Game::gameLoop()
                 }
             }
         }
+        Event e(UPDATE);
+        handleEvent(e);
     }
 }
 
@@ -238,6 +240,16 @@ void Game::handleEvent(Event &event)
         for (Component *component : object->components)
         {
             component->onEvent(event);
+        }
+    }
+    if (event.type == UPDATE)
+    {
+        for (Object *object : activeScene->getObjects())
+        {
+            for (Component *component : object->components)
+            {
+                component->update();
+            }
         }
     }
 }
