@@ -30,6 +30,7 @@ public:
     }
 
     bool isOverlapping(Vector2 position);
+    bool isColliding(Rect rect);
     bool isColliding();
 
     void setPosition(Vector2 position);
@@ -45,6 +46,7 @@ public:
     int getID();
     Object* getParent();
     bool getActive();
+    Vector2 getCenter();
 
     template <typename T>
     T* getComponent()
@@ -62,7 +64,8 @@ public:
 
     Object(Game *game, Vector2 position, Vector2 scale, float rotation, RGB color);
     ~Object();
-
+    
+    bool operator==(const Object &other) const;
     bool operator!=(const Object &other) const;
 
 private:
