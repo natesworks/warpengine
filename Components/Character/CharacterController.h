@@ -3,12 +3,13 @@
 #include "../../Types/Component.h"
 #include "../../Types/Object.h"
 
-class PlayerMovement : public Component
+class CharacterController : public Component
 {
 public:
-    PlayerMovement(Object *object, float speed = 10);
-    ~PlayerMovement();
+    CharacterController(Object *object, float speed = 10);
+    ~CharacterController();
     void onEvent(Event &event) override;
+
 private:
     Object *object;
     float speed;

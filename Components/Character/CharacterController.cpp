@@ -1,20 +1,20 @@
 #include <iostream>
 
-#include "PlayerMovement.h"
+#include "CharacterController.h"
 #include "../../Types/Keys.h"
 
-PlayerMovement::PlayerMovement(Object *object, float speed)
+CharacterController::CharacterController(Object *object, float speed)
 {
     this->object = object;
     this->speed = speed;
 }
 
-PlayerMovement::~PlayerMovement()
+CharacterController::~CharacterController()
 {
 
 }
 
-void PlayerMovement::onEvent(Event &event)
+void CharacterController::onEvent(Event &event)
 {
     if (event.type == EventType::KEYDOWN)
     {
