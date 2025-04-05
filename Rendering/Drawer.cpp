@@ -8,13 +8,15 @@
 
 #include "Drawer.h"
 #include "../Types/Vector2.h"
+#include "../Types/Scene.h"
 
 void Drawer::drawAll()
 {
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
     SDL_RenderClear(game->renderer);
 
-    for (Object *object : game->objects)
+    
+    for (Object *object : game->getActiveScene()->getObjects())
     {
         if (object->getActive() == false)
         {

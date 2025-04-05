@@ -4,9 +4,10 @@
 #include "EventType.h"
 #include "../Components/Collider.h"
 #include "Component.h"
+#include "../Types/Scene.h"
 
 Object::Object(Game *game, Vector2 position, Vector2 scale, float rotation, RGB color)
-    : game(game), position(position), scale(scale), rotation(rotation), color(color), id(game->objects.size()), active(true)
+    : game(game), position(position), scale(scale), rotation(rotation), color(color), id(game->getActiveScene()->getObjects().size()), active(true)
 {
 }
 
@@ -169,7 +170,7 @@ void Object::disown(Object *child)
  */
 bool Object::isColliding(Rect rect)
 {
-    for (Object *object : game->objects)
+    for (Object *object : game->getActiveScene()->getObjects())
     {
         if (*object != *this && object->active)
         {

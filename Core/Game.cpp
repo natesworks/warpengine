@@ -10,6 +10,9 @@
 #include "Game.h"
 #include "../Rendering/Drawer.h"
 #include "../Types/Component.h"
+#include "../Types/Scene.h"
+#include "../Rendering/Drawer.h"
+#include "../Types/Event.h"
 
 Game::~Game()
 {
@@ -143,10 +146,14 @@ void Game::gameLoop()
         }
         else
         {
-            // fix if you press two balancing themselves out keys (W and S, A and D) at the same time and then let one go you won't move
+            // fix for if you press two balancing themselves out keys (W and S, A and D) at the same time and then let one go you won't move
             Event e;
             e.type = EventType::KEYDOWN;
             e.key = (uint8_t *)SDL_GetKeyboardState(NULL);
+            if (e.key == NULL)
+            {
+                continue;
+            }
             for (int i = 0; i < 512; i++)
             {
                 if (e.key[i] == 1)
@@ -226,7 +233,7 @@ void Game::handleEvent(Event &event)
             handler(event);
         }
     }
-    for (Object *object : objects)
+    for (Object *object : activeScene->getObjects())
     {
         for (Component *component : object->components)
         {
@@ -243,4 +250,54 @@ double Game::getDeltaTime()
 double Game::getFPS()
 {
     return fps;
+}
+
+std::shared_ptr<Scene> Game::createScene(std::string name)
+{
+    std::shared_ptr<Scene> scene = std::make_shared<Scene>(this, name);
+    scenes.push_back(scene);
+    return scene;
+}
+
+void Game::loadScene(std::string name)
+{
+    for (std::shared_ptr<Scene> scene : scenes)
+    {
+        if (scene->getName() == name)
+        {
+            activeScene = scene;
+            return;
+        }
+    }
+    throw SceneNotFound();
+}
+
+void Game::loadScene(std::shared_ptr<Scene> scene)
+{
+    for (std::shared_ptr<Scene> s : scenes)
+    {
+        if (s->getName() == scene->getName())
+        {
+            activeScene = s;
+            return;
+        }
+    }
+    throw SceneNotFound();
+}
+
+std::shared_ptr<Scene> Game::getScene(std::string name)
+{
+    for (std::shared_ptr<Scene> scene : scenes)
+    {
+        if (scene->getName() == name)
+        {
+            return scene;
+        }
+    }
+    throw SceneNotFound();
+}
+
+std::shared_ptr<Scene> Game::getActiveScene()
+{
+    return activeScene;
 }

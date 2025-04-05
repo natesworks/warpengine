@@ -2,6 +2,7 @@
 #include <functional>
 
 #include "BoxCollider.h"
+#include "../Types/Scene.h"
 
 BoxCollider::BoxCollider(Object *object, std::function<void()> onTriggerEnter)
     : Collider(object, onTriggerEnter)
@@ -12,7 +13,7 @@ void BoxCollider::onEvent(Event &event)
 {
     if ((event.type == OBJECTPOSITIONCHANGED || event.type == OBJECTROTATIONCHANGED || event.type == OBJECTROTATIONCHANGED) && event.object == object)
     {
-        for (const auto &otherPtr : object->game->objects)
+        for (const auto &otherPtr : object->game->getActiveScene()->getObjects())
         {
             Object &other = *otherPtr;
             if (other != *object)

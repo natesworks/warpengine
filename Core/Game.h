@@ -8,14 +8,13 @@
 #include <unordered_map>
 #include <functional>
 
-#include "../Types/Object.h"
-#include "../Rendering/Drawer.h"
-#include "../Types/Event.h"
 #include "../Types/Vector2.h"
 #include "../Types/WindowType.h"
 #include "../Types/WindowType.h"
 #include "../Types/WindowSettings.h"
+#include "../Types/EventType.h"
 
+class Scene;
 class Object;
 class Drawer;
 struct Event;
@@ -27,18 +26,10 @@ public:
     Vector2 scale;
     Drawer *drawer;
 
-
     template <typename... Args>
     Game(Args &&...args) : windowSettings(std::forward<Args>(args)...) {}
     ~Game();
 
-    template <typename... Args>
-    Object *addObject(Args &&...args)
-    {
-        Object *object = new Object(this, std::forward<Args>(args)...);
-        objects.push_back(object);
-        return object;
-    }
     int addEventHandler(EventType eventType, std::function<void(Event &event)> handler);
     void removeEventHandler(EventType eventType, int index);
     void start();
@@ -51,11 +42,24 @@ public:
     void handleEvent(Event &event);
 
     bool togglableFullscreen = true;
-    std::vector<Object *> objects;
     WindowSettings windowSettings;
+
+    template <typename... Args>
+    std::shared_ptr<Scene> addScene(Args &&...args)
+    {
+        scenes.push_back(std::make_shared<Scene>(this, std::forward<Args>(args)...));
+        return scenes.back();
+    }
+    void loadScene(std::string name);
+    void loadScene(std::shared_ptr<Scene> scene);
+    std::shared_ptr<Scene> createScene(std::string name);
+    std::shared_ptr<Scene> getActiveScene();
+    std::shared_ptr<Scene> getScene(std::string name);
 
 private:
     SDL_Window *gameWindow = nullptr;
+    std::vector<std::shared_ptr<Scene>> scenes;
+    std::shared_ptr<Scene> activeScene;
 
     double deltaTime;
     double fps;
@@ -65,6 +69,10 @@ private:
     WindowType startingWindowType;
 };
 
+
+/**
+ * TODO Move to a separate file
+ */
 class InitialisationFailed
 {
 };
@@ -75,5 +83,9 @@ class RendererCreationFailed
 {
 };
 class RenderFailed
+{
+};
+
+class SceneNotFound
 {
 };

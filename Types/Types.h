@@ -7,3 +7,4 @@
 #include "Vector2.h"
 #include "WindowType.h"
 #include "Rect.h"
+#include "Scene.h"
