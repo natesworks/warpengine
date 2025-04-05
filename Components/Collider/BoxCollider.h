@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "../Types/Object.h"
+#include "../../Types/Object.h"
 #include "Collider.h"
 
 class BoxCollider : public Collider

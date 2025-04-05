@@ -2,7 +2,7 @@
 #include "../Core/Game.h"
 #include "Event.h"
 #include "EventType.h"
-#include "../Components/Collider.h"
+#include "../Components/Collider/Collider.h"
 #include "Component.h"
 #include "../Types/Scene.h"
 

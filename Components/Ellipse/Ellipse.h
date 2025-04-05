@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Types/Component.h"
-#include "../Types/Object.h"
+#include "../../Types/Component.h"
+#include "../../Types/Object.h"
 
 class Ellipse : public Component
 {

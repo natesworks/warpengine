@@ -2,7 +2,7 @@
 
 Rigidbody::Rigidbody(Object *object)
 {
-
+    
 }
 
 Rigidbody::~Rigidbody() {}

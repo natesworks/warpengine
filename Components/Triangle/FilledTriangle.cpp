@@ -1,6 +1,6 @@
 #include "FilledTriangle.h"
-#include "../Rendering/Drawer.h"
-#include "../Types/Vector2.h"
+#include "../../Rendering/Drawer.h"
+#include "../../Types/Vector2.h"
 
 FilledTriangle::FilledTriangle(Object *object)
 {

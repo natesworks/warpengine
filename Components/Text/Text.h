@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Types/Component.h"
-#include "../Types/Object.h"
-#include "../Types/Event.h"
+#include "../../Types/Component.h"
+#include "../../Types/Object.h"
+#include "../../Types/Event.h"
 
 class Text : public Component
 {

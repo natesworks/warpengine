@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "PlayerMovement.h"
-#include "../Types/Keys.h"
+#include "../../Types/Keys.h"
 
 PlayerMovement::PlayerMovement(Object *object, float speed)
 {

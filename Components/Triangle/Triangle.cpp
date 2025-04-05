@@ -1,6 +1,6 @@
 #include "Triangle.h"
-#include "../Rendering/Drawer.h"
-#include "../Types/Vector2.h"
+#include "../../Rendering/Drawer.h"
+#include "../../Types/Vector2.h"
 
 Triangle::Triangle(Object *object)
 {

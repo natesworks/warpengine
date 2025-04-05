@@ -2,8 +2,8 @@
 
 #include <functional>
 
-#include "../Types/Component.h"
-#include "../Types/Object.h"
+#include "../../Types/Component.h"
+#include "../../Types/Object.h"
 
 class Collider : public Component
 {

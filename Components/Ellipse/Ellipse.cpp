@@ -1,6 +1,6 @@
 #include "Ellipse.h"
-#include "../Rendering/Drawer.h"
-#include "../Types/Vector2.h"
+#include "../../Rendering/Drawer.h"
+#include "../../Types/Vector2.h"
 
 Ellipse::Ellipse(Object *object)
 {

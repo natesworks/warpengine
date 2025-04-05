@@ -1,6 +1,6 @@
 #include "Text.h"
-#include "../Rendering/Drawer.h"
-#include "../Types/Vector2.h"
+#include "../../Rendering/Drawer.h"
+#include "../../Types/Vector2.h"
 #include <string>
 
 Text::Text(Object *object, std::string text, std::string font, int fontSize) : text(text), font(font), fontSize(fontSize)

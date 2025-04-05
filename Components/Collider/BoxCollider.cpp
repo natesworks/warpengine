@@ -2,7 +2,7 @@
 #include <functional>
 
 #include "BoxCollider.h"
-#include "../Types/Scene.h"
+#include "../../Types/Scene.h"
 
 BoxCollider::BoxCollider(Object *object, std::function<void()> onTriggerEnter)
     : Collider(object, onTriggerEnter)
