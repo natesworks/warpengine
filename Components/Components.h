@@ -9,5 +9,5 @@
 #include "Image/Image.h"
 #include "Triangle/Triangle.h"
 #include "Triangle/FilledTriangle.h"
-#include "Character/PlayerMovement.h"
-#include "Character/Rigidbody.h"
+#include "Physics/PlayerMovement.h"
+#include "Physics/Rigidbody.h"
