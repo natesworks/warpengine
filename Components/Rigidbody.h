@@ -9,6 +9,5 @@ class Rigidbody : public Component
 public:
     Rigidbody(Object *object);
     ~Rigidbody();
-    void draw(Object *object) override;
     void onEvent(Event &event) override;
 };

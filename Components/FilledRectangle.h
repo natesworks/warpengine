@@ -9,5 +9,4 @@ public:
     FilledRectangle(Object *object);
     ~FilledRectangle();
     void draw(Object *object) override;
-    void onEvent(Event& event) override {}
 };

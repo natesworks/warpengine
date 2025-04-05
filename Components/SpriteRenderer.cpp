@@ -6,12 +6,10 @@
 
 SpriteRenderer::SpriteRenderer(Object *object, std::string image) : image(image)
 {
-    draw(object);
 }
 
 SpriteRenderer::~SpriteRenderer()
 {
-
 }
 
 void SpriteRenderer::draw(Object *object)

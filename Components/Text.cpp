@@ -5,12 +5,10 @@
 
 Text::Text(Object *object, std::string text, std::string font, int fontSize) : text(text), font(font), fontSize(fontSize)
 {
-    draw(object);
 }
 
 Text::~Text()
 {
-
 }
 
 void Text::draw(Object *object)

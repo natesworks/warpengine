@@ -25,13 +25,15 @@ class Game
 public:
     SDL_Renderer *renderer = nullptr;
     Vector2 scale;
-    std::unique_ptr<Drawer> drawer;
+    Drawer *drawer;
 
-    Game(int x, int y, int w, int h, std::string title = "Game", WindowType windowType = WINDOWED);
+
+    template <typename... Args>
+    Game(Args &&...args) : windowSettings(std::forward<Args>(args)...) {}
     ~Game();
 
     template <typename... Args>
-    Object* addObject(Args&&... args)
+    Object *addObject(Args &&...args)
     {
         Object *object = new Object(this, std::forward<Args>(args)...);
         objects.push_back(object);

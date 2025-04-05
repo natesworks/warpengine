@@ -4,12 +4,10 @@
 
 Triangle::Triangle(Object *object)
 {
-    draw(object);
 }
 
 Triangle::~Triangle()
 {
-
 }
 
 void Triangle::draw(Object *object)

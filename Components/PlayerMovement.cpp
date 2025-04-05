@@ -14,11 +14,6 @@ PlayerMovement::~PlayerMovement()
 
 }
 
-void PlayerMovement::draw(Object *object)
-{
-
-}
-
 void PlayerMovement::onEvent(Event &event)
 {
     if (event.type == EventType::KEYDOWN)

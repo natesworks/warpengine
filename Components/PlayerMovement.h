@@ -8,7 +8,6 @@ class PlayerMovement : public Component
 public:
     PlayerMovement(Object *object, float speed = 10);
     ~PlayerMovement();
-    void draw(Object *object) override;
     void onEvent(Event &event) override;
 private:
     Object *object;

@@ -4,12 +4,10 @@
 
 FilledTriangle::FilledTriangle(Object *object)
 {
-    draw(object);
 }
 
 FilledTriangle::~FilledTriangle()
 {
-
 }
 
 void FilledTriangle::draw(Object *object)

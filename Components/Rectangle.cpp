@@ -4,12 +4,10 @@
 
 Rectangle::Rectangle(Object *object)
 {
-    draw(object);
 }
 
 Rectangle::~Rectangle()
 {
-
 }
 
 void Rectangle::draw(Object *object)

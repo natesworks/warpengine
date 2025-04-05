@@ -3,12 +3,10 @@
 
 FilledEllipse::FilledEllipse(Object *object)
 {
-    draw(object);
 }
 
 FilledEllipse::~FilledEllipse()
 {
-
 }
 
 void FilledEllipse::draw(Object *object)

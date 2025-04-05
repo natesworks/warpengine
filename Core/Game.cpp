@@ -11,53 +11,6 @@
 #include "../Rendering/Drawer.h"
 #include "../Types/Component.h"
 
-Game::Game(int x, int y, int w, int h, std::string title, WindowType windowType) : deltaTime(0), windowSettings(x, y, w, h, title, windowType)
-{
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        throw InitialisationFailed();
-    }
-
-    uint32_t flags = 0;
-    if (windowType == BORDERLESS)
-    {
-        flags = SDL_WINDOW_BORDERLESS;
-    }
-    else if (windowType == FULLSCREEN)
-    {
-        flags = SDL_WINDOW_FULLSCREEN;
-    }
-    else if (windowType == DESKTOPFULLSCREEN)
-    {
-        flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
-    }
-    startingWindowType = windowType;
-
-    drawer = std::make_unique<Drawer>(this);
-    gameWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, flags);
-    if (!gameWindow)
-    {
-        throw WindowCreationFailed();
-    }
-    scale.x = (float)w / (float)windowSettings.referenceWidth;
-    scale.y = (float)h / (float)windowSettings.referenceHeight;
-    SDL_SetWindowResizable(gameWindow, SDL_TRUE);
-    renderer = SDL_CreateRenderer(gameWindow, -1, 0);
-
-    if (!renderer)
-    {
-        std::cerr << "Renderer creation failed: " << SDL_GetError() << std::endl;
-        throw RendererCreationFailed();
-    }
-
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    if (SDL_RenderClear(renderer) != 0)
-    {
-        throw RenderFailed();
-    }
-    SDL_RenderPresent(renderer);
-}
-
 Game::~Game()
 {
     if (renderer)
@@ -130,11 +83,11 @@ void Game::gameLoop()
                     uint32_t flags = SDL_GetWindowFlags(gameWindow);
                     if (flags & SDL_WINDOW_FULLSCREEN_DESKTOP || (flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == SDL_WINDOW_FULLSCREEN_DESKTOP)
                     {
-                        if (startingWindowType == WINDOWED)
+                        if (windowSettings.fullscreenType == WINDOWED)
                         {
                             SDL_SetWindowBordered(gameWindow, SDL_TRUE);
                         }
-                        else if (startingWindowType == BORDERLESS)
+                        else if (windowSettings.fullscreenType == BORDERLESS)
                         {
                             SDL_SetWindowBordered(gameWindow, SDL_FALSE);
                         }
@@ -144,7 +97,7 @@ void Game::gameLoop()
                     else
                     {
                         uint32_t fullscreenType;
-                        if (startingWindowType == FULLSCREEN)
+                        if (windowSettings.fullscreenType == FULLSCREEN)
                         {
                             fullscreenType = SDL_WINDOW_FULLSCREEN;
                         }
@@ -207,6 +160,49 @@ void Game::gameLoop()
 
 void Game::start()
 {
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
+        throw InitialisationFailed();
+    }
+
+    uint32_t flags = 0;
+    if (windowSettings.windowType == BORDERLESS)
+    {
+        flags = SDL_WINDOW_BORDERLESS;
+    }
+    else if (windowSettings.windowType == FULLSCREEN)
+    {
+        flags = SDL_WINDOW_FULLSCREEN;
+    }
+    else if (windowSettings.windowType == DESKTOPFULLSCREEN)
+    {
+        flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+    }
+
+    drawer = new Drawer(this);
+    gameWindow = SDL_CreateWindow(windowSettings.title.c_str(), windowSettings.x, windowSettings.y, windowSettings.w, windowSettings.h, flags);
+    if (!gameWindow)
+    {
+        throw WindowCreationFailed();
+    }
+
+    scale.x = (float)windowSettings.w / (float)windowSettings.referenceWidth;
+    scale.y = (float)windowSettings.h / (float)windowSettings.referenceHeight;
+    SDL_SetWindowResizable(gameWindow, SDL_TRUE);
+    renderer = SDL_CreateRenderer(gameWindow, -1, 0);
+
+    if (!renderer)
+    {
+        std::cerr << "Renderer creation failed: " << SDL_GetError() << std::endl;
+        throw RendererCreationFailed();
+    }
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    if (SDL_RenderClear(renderer) != 0)
+    {
+        throw RenderFailed();
+    }
+    SDL_RenderPresent(renderer);
     std::thread gameLoopThread(&Game::gameLoop, this);
     gameLoopThread.detach();
 }

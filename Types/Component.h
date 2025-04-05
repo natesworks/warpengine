@@ -11,6 +11,6 @@ class Component
 {
 public:
     virtual ~Component() = default;
-    virtual void draw(Object* object) = 0;
-    virtual void onEvent(Event& event) = 0;
+    virtual void draw(Object* object) {};
+    virtual void onEvent(Event& event) {};
 };

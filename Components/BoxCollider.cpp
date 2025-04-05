@@ -49,4 +49,3 @@ bool BoxCollider::isColliding(Object *object)
 }
 
 BoxCollider::~BoxCollider() {}
-void BoxCollider::draw(Object *object) {}

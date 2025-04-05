@@ -10,7 +10,6 @@ class Button : public Component
 public:
     Button(Object *object, std::function<void()> onClickFunction = []() {});
     ~Button();
-    void draw(Object *object) override;
     void onEvent(Event &event) override;
     void setOnClickFunction(std::function<void()> func);
 

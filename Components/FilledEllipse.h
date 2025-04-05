@@ -9,5 +9,4 @@ public:
     FilledEllipse(Object *object);
     ~FilledEllipse();
     void draw(Object *object) override;
-    void onEvent(Event& event) override {}
 };

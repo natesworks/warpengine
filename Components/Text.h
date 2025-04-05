@@ -10,7 +10,6 @@ public:
     Text(Object *object, std::string text, std::string font, int fontSize);
     ~Text();
     void draw(Object *object) override;
-    void onEvent(Event &event) override {}
 
     std::string font;
     std::string text;

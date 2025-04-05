@@ -4,12 +4,10 @@
 
 Ellipse::Ellipse(Object *object)
 {
-    draw(object);
 }
 
 Ellipse::~Ellipse()
 {
-
 }
 
 void Ellipse::draw(Object *object)
