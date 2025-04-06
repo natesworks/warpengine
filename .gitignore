@@ -9,3 +9,5 @@ warpengine-test
 libwarpengine.so
 warpengine.dll
 build
+.cache
+*.idx

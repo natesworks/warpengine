@@ -12,16 +12,16 @@ public:
     ~Scene() = default;
 
     template <typename... Args>
-    Object *addObject(Args &&...args)
+    std::shared_ptr<Object> addObject(Args &&...args)
     {
-        Object *object = new Object(game, std::forward<Args>(args)...);
+        std::shared_ptr<Object> object = std::make_shared<Object>(std::forward<Args>(args)...);
         objects.push_back(object);
         return object;
     }
     template <typename T>
-    T *getObjectByType()
+    std::shared_ptr<T> getObjectByType()
     {
-        for (Object *object : objects)
+        for (std::shared_ptr<Object> object : objects)
         {
             if (T *castObject = dynamic_cast<T *>(object))
             {
@@ -30,14 +30,14 @@ public:
         }
         return nullptr;
     }
-    void removeObject(Object *object);
-    Object *getObject(int id);
+    void removeObject(std::shared_ptr<Object> object);
+    std::shared_ptr<Object> getObject(int id);
     std::string getName();
     void setName(std::string name);
-    std::vector<Object *> getObjects();
+    const std::vector<std::shared_ptr<Object>>& getObjects() const;
 
 private:
-    std::vector<Object *> objects;
+    std::vector<std::shared_ptr<Object>> objects;
     std::string name;
     Game *game;
 };

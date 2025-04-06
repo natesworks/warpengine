@@ -1,22 +1,28 @@
 #include "Object.h"
+#include "../Components/Collider/Collider.h"
 #include "../Core/Game.h"
+#include "../Types/Scene.h"
+#include "Component.h"
 #include "Event.h"
 #include "EventType.h"
-#include "../Components/Collider/Collider.h"
-#include "Component.h"
-#include "../Types/Scene.h"
 
-Object::Object(Game *game, Vector2 position, Vector2 scale, float rotation, RGB color)
-    : game(game), position(position), scale(scale), rotation(rotation), color(color), id(game->getActiveScene()->getObjects().size()), active(true)
+Object::Object(Game* game, Vector2 position, Vector2 scale, float rotation, RGB color)
+	: game(game)
+	, position(position)
+	, scale(scale)
+	, rotation(rotation)
+	, color(color)
+	, id(game->getActiveScene()->getObjects().size())
+	, active(true)
 {
 }
 
 Object::~Object()
 {
-    for (Component *component : components)
-    {
-        delete component;
-    }
+	for (Component* component : components)
+	{
+		delete component;
+	}
 }
 
 /**
@@ -25,18 +31,18 @@ Object::~Object()
  */
 bool Object::isOverlapping(Vector2 position)
 {
-    if (!active)
-        return false;
+	if (!active)
+		return false;
 
-    position = position * game->scale;
-    Vector2 position2 = this->position * game->scale;
+	position = position * game->scale;
+	Vector2 position2 = this->position * game->scale;
 
-    if (position.x > position2.x && position.x < position2.x + scale.x && position.y > position2.y && position.y < position2.y + scale.y)
-    {
-        return true;
-    }
+	if (position.x > position2.x && position.x < position2.x + scale.x && position.y > position2.y && position.y < position2.y + scale.y)
+	{
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 /**
@@ -45,12 +51,12 @@ bool Object::isOverlapping(Vector2 position)
  */
 void Object::setPosition(Vector2 position)
 {
-    Event e(OBJECTPOSITIONCHANGED);
-    e.object = this;
-    e.previousPosition = this->position;
-    this->position = position;
+	Event e(OBJECTPOSITIONCHANGED);
+	e.object = this;
+	e.previousPosition = this->position;
+	this->position = position;
 
-    game->handleEvent(e);
+	game->handleEvent(e);
 }
 
 /**
@@ -59,12 +65,12 @@ void Object::setPosition(Vector2 position)
  */
 void Object::setScale(Vector2 scale)
 {
-    Event e(OBJECTSCALECHANGED);
-    e.object = this;
-    e.previousScale = this->scale;
-    this->scale = scale;
+	Event e(OBJECTSCALECHANGED);
+	e.object = this;
+	e.previousScale = this->scale;
+	this->scale = scale;
 
-    game->handleEvent(e);
+	game->handleEvent(e);
 }
 
 /**
@@ -73,22 +79,22 @@ void Object::setScale(Vector2 scale)
  */
 void Object::setRotation(float rotation)
 {
-    Event e(OBJECTROTATIONCHANGED);
-    e.object = this;
-    e.previousRotation = this->rotation;
-    this->rotation = rotation;
+	Event e(OBJECTROTATIONCHANGED);
+	e.object = this;
+	e.previousRotation = this->rotation;
+	this->rotation = rotation;
 
-    game->handleEvent(e);
+	game->handleEvent(e);
 }
 
 /**
  * @brief Sets parent to pointer to object and adds this object as child to parent
  * @param object Pointer to parent object
  */
-void Object::setParent(Object *object)
+void Object::setParent(Object* object)
 {
-    this->parent = object;
-    object->children.push_back(this);
+	this->parent = object;
+	object->children.push_back(this);
 }
 
 /**
@@ -97,7 +103,7 @@ void Object::setParent(Object *object)
  */
 void Object::setActive(bool active)
 {
-    this->active = active;
+	this->active = active;
 }
 
 /**
@@ -106,7 +112,7 @@ void Object::setActive(bool active)
  */
 Vector2 Object::getPosition()
 {
-    return position;
+	return position;
 }
 
 /**
@@ -115,7 +121,7 @@ Vector2 Object::getPosition()
  */
 Vector2 Object::getScale()
 {
-    return scale;
+	return scale;
 }
 
 /**
@@ -124,7 +130,7 @@ Vector2 Object::getScale()
  */
 float Object::getRotation()
 {
-    return rotation;
+	return rotation;
 }
 
 /**
@@ -133,16 +139,16 @@ float Object::getRotation()
  */
 int Object::getID()
 {
-    return id;
+	return id;
 }
 
 /**
  * @brief Returns pointer to the parent object or nullptr
  * @returns Pointer to parent object
  */
-Object *Object::getParent()
+Object* Object::getParent()
 {
-    return parent;
+	return parent;
 }
 
 /**
@@ -151,17 +157,17 @@ Object *Object::getParent()
  */
 bool Object::getActive()
 {
-    return active;
+	return active;
 }
 
 /**
  * @brief Removes pointer to child from parent and sets parent to nullptr for child
  * @param child Pointer to child object
  */
-void Object::disown(Object *child)
+void Object::disown(Object* child)
 {
-    children.erase(std::remove(children.begin(), children.end(), child), children.end());
-    child->parent = nullptr;
+	children.erase(std::remove(children.begin(), children.end(), child), children.end());
+	child->parent = nullptr;
 }
 
 /**
@@ -170,21 +176,21 @@ void Object::disown(Object *child)
  */
 bool Object::isColliding(Rect rect)
 {
-    for (Object *object : game->getActiveScene()->getObjects())
-    {
-        if (*object != *this && object->active)
-        {
-            for (Component *component : object->components)
-            {
-                Collider *collider = dynamic_cast<Collider *>(component);
-                if (collider != nullptr && collider->isColliding(rect))
-                {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
+	for (std::shared_ptr<Object> object : game->getActiveScene()->getObjects())
+	{
+		if (*object != *this && object->active)
+		{
+			for (Component* component : object->components)
+			{
+				Collider* collider = dynamic_cast<Collider*>(component);
+				if (collider != nullptr && collider->isColliding(rect))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 /**
@@ -193,7 +199,7 @@ bool Object::isColliding(Rect rect)
  */
 bool Object::isColliding()
 {
-    return isColliding(Rect(position.x, position.y, scale.x, scale.y));
+	return isColliding(Rect(position.x, position.y, scale.x, scale.y));
 }
 
 /**
@@ -201,57 +207,57 @@ bool Object::isColliding()
  */
 void Object::findSafePosition()
 {
-    Collider *collider = nullptr;
+	Collider* collider = nullptr;
 
-    for (Component *component : components)
-    {
-        Collider *foundCollider = dynamic_cast<Collider *>(component);
-        if (foundCollider != nullptr)
-        {
-            collider = foundCollider;
-            break;
-        }
-    }
+	for (Component* component : components)
+	{
+		Collider* foundCollider = dynamic_cast<Collider*>(component);
+		if (foundCollider != nullptr)
+		{
+			collider = foundCollider;
+			break;
+		}
+	}
 
-    if (collider == nullptr || !isColliding())
-    {
-        return;
-    }
+	if (!collider || !isColliding())
+	{
+		return;
+	}
 
-    float step = 0.1f;
+	float step = 0.1f;
 
-    while (true)
-    {
-        Rect testRectX = Rect(position.x + step, position.y, scale.x, scale.y);
-        if (!isColliding(testRectX))
-        {
-            position.x += step;
-            return;
-        }
+	while (true)
+	{
+		Rect testRectX = Rect(position.x + step, position.y, scale.x, scale.y);
+		if (!isColliding(testRectX))
+		{
+			position.x += step;
+			return;
+		}
 
-        testRectX = Rect(position.x - step, position.y, scale.x, scale.y);
-        if (!isColliding(testRectX))
-        {
-            position.x -= step;
-            return;
-        }
+		testRectX = Rect(position.x - step, position.y, scale.x, scale.y);
+		if (!isColliding(testRectX))
+		{
+			position.x -= step;
+			return;
+		}
 
-        Rect testRectY = Rect(position.x, position.y + step, scale.x, scale.y);
-        if (!isColliding(testRectY))
-        {
-            position.y += step;
-            return;
-        }
+		Rect testRectY = Rect(position.x, position.y + step, scale.x, scale.y);
+		if (!isColliding(testRectY))
+		{
+			position.y += step;
+			return;
+		}
 
-        testRectY = Rect(position.x, position.y - step, scale.x, scale.y);
-        if (!isColliding(testRectY))
-        {
-            position.y -= step;
-            return;
-        }
+		testRectY = Rect(position.x, position.y - step, scale.x, scale.y);
+		if (!isColliding(testRectY))
+		{
+			position.y -= step;
+			return;
+		}
 
-        step += 0.1f;
-    }
+		step += 0.1f;
+	}
 }
 
 /**
@@ -259,15 +265,15 @@ void Object::findSafePosition()
  */
 Vector2 Object::getCenter()
 {
-    return Vector2(position.x + scale.x / 2, position.y + scale.y / 2);
+	return Vector2(position.x + scale.x / 2, position.y + scale.y / 2);
 }
 
-bool Object::operator==(const Object &other) const
+bool Object::operator==(const Object& other) const
 {
-    return this == &other;
+	return this == &other;
 }
 
-bool Object::operator!=(const Object &other) const
+bool Object::operator!=(const Object& other) const
 {
-    return this != &other;
+	return this != &other;
 }

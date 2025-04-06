@@ -1,48 +1,55 @@
 #include "Rigidbody.h"
 
-Rigidbody::Rigidbody(Object *object, float mass, float gravity, Vector2 force, Vector2 friction)
-    : object(object), mass(mass), gravity(gravity), force(force), friction(friction)
+Rigidbody::Rigidbody(Object *object, float mass, float gravity, Vector2 friction)
+	: object(object)
+	, mass(mass)
+	, gravity(gravity)
+	, force(0, 0)
+	, friction(friction)
+	, velocity(0, 0)
+
 {
 }
 
-Rigidbody::~Rigidbody() {}
+Rigidbody::~Rigidbody() { }
 
-void Rigidbody::update()
+void Rigidbody::fixedUpdate()
 {
-    Vector2 acceleration = force / mass;
+	double dt = object->game->getDeltaTime();
 
-    velocity += acceleration;
-    velocity.y += gravity;
+	Vector2 totalForce = force + Vector2(0, mass * gravity);
+	Vector2 acceleration = totalForce / mass;
+	velocity += acceleration * dt;
 
-    velocity.x *= (1.0f - friction.x);
-    velocity.y *= (1.0f - friction.y);
+	velocity.x *= (1.0f - friction.x);
+	velocity.y *= (1.0f - friction.y);
 
-    object->setPosition(object->getPosition() + velocity * object->game->getDeltaTime());
+	object->setPosition(object->getPosition() + velocity * dt);
 
-    force = Vector2(0, 0);
+	force = Vector2(0, 0);
 }
 
 void Rigidbody::applyForce(Vector2 force)
 {
-    this->force = force;
+	this->force += force;
 }
 
 void Rigidbody::setMass(float mass)
 {
-    this->mass = mass;
+	this->mass = mass;
 }
 
 float Rigidbody::getMass() const
 {
-    return mass;
+	return mass;
 }
 
 void Rigidbody::setGravity(float gravity)
 {
-    this->gravity = gravity;
+	this->gravity = gravity;
 }
 
 float Rigidbody::getGravity() const
 {
-    return gravity;
+	return gravity;
 }
