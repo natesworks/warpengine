@@ -24,7 +24,7 @@ class Game
 public:
     SDL_Renderer *renderer = nullptr;
     Vector2 scale;
-    Drawer *drawer;
+    std::shared_ptr<Drawer> drawer;
 
     template <typename... Args>
     Game(Args &&...args) : windowSettings(std::forward<Args>(args)...) {}
@@ -50,11 +50,11 @@ public:
         scenes.push_back(std::make_shared<Scene>(this, std::forward<Args>(args)...));
         return scenes.back();
     }
-    void loadScene(std::string name);
+    void loadScene(const std::string& name);
     void loadScene(std::shared_ptr<Scene> scene);
-    std::shared_ptr<Scene> createScene(std::string name);
+    std::shared_ptr<Scene> createScene(const std::string& name);
     std::shared_ptr<Scene> getActiveScene();
-    std::shared_ptr<Scene> getScene(std::string name);
+    std::shared_ptr<Scene> getScene(const std::string& name);
 
 private:
     SDL_Window *gameWindow = nullptr;

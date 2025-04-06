@@ -193,7 +193,7 @@ void Game::start()
         flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
     }
 
-    drawer = new Drawer(this);
+    drawer = std::make_shared<Drawer>(this);
     gameWindow = SDL_CreateWindow(windowSettings.title.c_str(), windowSettings.x, windowSettings.y, windowSettings.w, windowSettings.h, flags);
     if (!gameWindow)
     {
@@ -259,14 +259,14 @@ double Game::getFPS()
     return fps;
 }
 
-std::shared_ptr<Scene> Game::createScene(std::string name)
+std::shared_ptr<Scene> Game::createScene(const std::string& name)
 {
     std::shared_ptr<Scene> scene = std::make_shared<Scene>(this, name);
     scenes.push_back(scene);
     return scene;
 }
 
-void Game::loadScene(std::string name)
+void Game::loadScene(const std::string& name)
 {
     for (std::shared_ptr<Scene> scene : scenes)
     {
@@ -292,7 +292,7 @@ void Game::loadScene(std::shared_ptr<Scene> scene)
     throw SceneNotFound();
 }
 
-std::shared_ptr<Scene> Game::getScene(std::string name)
+std::shared_ptr<Scene> Game::getScene(const std::string& name)
 {
     for (std::shared_ptr<Scene> scene : scenes)
     {
