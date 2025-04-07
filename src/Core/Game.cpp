@@ -49,7 +49,7 @@ void Game::gameLoop()
 		now = SDL_GetPerformanceCounter();
 		double frameTimeTicks = now - last;
 		deltaTime = frameTimeTicks / (double)SDL_GetPerformanceFrequency();
-		fps = (frameTime > 0) ? 1.0 / frameTime : 0.0f;
+		fps = (deltaTime > 0) ? 1.0 / frameTime : 0.0f;
 		accumulator += deltaTime;
 
 		SDL_Event event;
