@@ -1,7 +1,8 @@
+#include <stdexcept>
+
 #include "CharacterController.h"
 #include "../../Types/Keys.h"
 #include "../Physics/Rigidbody.h"
-#include <stdexcept>
 
 CharacterController::CharacterController(Object *object, float speed)
 	: object(object)
