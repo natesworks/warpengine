@@ -41,15 +41,14 @@ void Game::gameLoop()
 {
 	uint64_t now = SDL_GetPerformanceCounter();
 	uint64_t last = now;
-	const double fixedTimeStep = 1.0f / physicsFPS;
+	const double timestep = 1.0f / physicsFPS;
 	while (true)
 	{
+		drawer->drawAll();
 		last = now;
 		now = SDL_GetPerformanceCounter();
 		double frameTimeTicks = now - last;
-		double frameTime = frameTimeTicks / (double)SDL_GetPerformanceFrequency();
-		drawer->drawAll();
-		deltaTime = frameTime;
+		deltaTime = frameTimeTicks / (double)SDL_GetPerformanceFrequency();
 		fps = (frameTime > 0) ? 1.0 / frameTime : 0.0f;
 		accumulator += deltaTime;
 
@@ -188,7 +187,7 @@ void Game::gameLoop()
 			}
 		}
 
-		while (accumulator >= fixedTimeStep)
+		while (accumulator >= timestep)
 		{
 			for (std::shared_ptr<Object> object : activeScene->getObjects())
 			{
@@ -197,7 +196,7 @@ void Game::gameLoop()
 					component->fixedUpdate();
 				}
 			}
-			accumulator -= fixedTimeStep;
+			accumulator -= timestep;
 		}
 	}
 }
