@@ -39,13 +39,18 @@ void CharacterController::fixedUpdate()
 
 	if (event.type == KEYDOWN)
 	{
-		if (event.key[KEY_W])
+		if (event.key[KEY_W] || event.key[KEY_SPACE] || event.key[KEY_UP])
+		{
 			rigidbody->applyForce(Vector2(0, -speed));
-		if (event.key[KEY_A])
+		}
+			
+		if (event.key[KEY_A] || event.key[KEY_RIGHT])
+		{
 			rigidbody->applyForce(Vector2(-speed, 0));
-		if (event.key[KEY_S])
-			rigidbody->applyForce(Vector2(0, speed));
-		if (event.key[KEY_D])
+		}
+		if (event.key[KEY_D] || event.key[KEY_LEFT)
+		{
 			rigidbody->applyForce(Vector2(speed, 0));
+		}
 	}
 }
