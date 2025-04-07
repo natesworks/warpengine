@@ -45,11 +45,11 @@ void CharacterController::fixedUpdate()
 			rigidbody->applyForce(Vector2(0, -speed));
 		}
 			
-		if (event.key[KEY_A] || event.key[KEY_RIGHT])
+		if (event.key[KEY_A] || event.key[KEY_RIGHT]
 		{
 			rigidbody->applyForce(Vector2(-speed, 0));
 		}
-		if (event.key[KEY_D] || event.key[KEY_LEFT))
+		if (event.key[KEY_D] || event.key[KEY_LEFT)
 		{
 			rigidbody->applyForce(Vector2(speed, 0));
 		}
