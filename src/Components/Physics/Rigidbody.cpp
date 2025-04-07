@@ -15,16 +15,14 @@ Rigidbody::~Rigidbody() { }
 
 void Rigidbody::fixedUpdate()
 {
-	double dt = object->game->getDeltaTime();
-
 	Vector2 totalForce = force + Vector2(0, mass * gravity);
 	Vector2 acceleration = totalForce / mass;
-	velocity += acceleration * dt;
+	velocity += acceleration;
 
 	velocity.x *= (1.0f - friction.x);
 	velocity.y *= (1.0f - friction.y);
 
-	object->setPosition(object->getPosition() + velocity * dt);
+	object->setPosition(object->getPosition() + velocity);
 
 	force = Vector2(0, 0);
 }
