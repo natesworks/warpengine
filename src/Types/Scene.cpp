@@ -4,19 +4,21 @@
 
 Scene::Scene(Game *game, std::string name) : game(game), name(name) {}
 
-void Scene::removeObject(Object *object)
+void Scene::removeObject(std::shared_ptr<Object> object)
 {
-    auto it = std::find(objects.begin(), objects.end(), object);
-    if (it != objects.end())
+    for (std::shared_ptr<Object> obj : objects)
     {
-        delete *it;
-        objects.erase(it);
+        if (obj == object)
+        {
+            objects.erase(std::remove(objects.begin(), objects.end(), obj), objects.end());
+            return;
+        }
     }
 }
 
-Object *Scene::getObject(int id)
+std::shared_ptr<Object> Scene::getObject(int id)
 {
-    for (Object *object : objects)
+    for (std::shared_ptr<Object> object : objects)
     {
         if (object->getID() == id)
         {
@@ -36,7 +38,7 @@ void Scene::setName(std::string name)
     this->name = name;
 }
 
-std::vector<Object *> Scene::getObjects()
+const std::vector<std::shared_ptr<Object>>& Scene::getObjects() const
 {
     return objects;
 }

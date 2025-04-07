@@ -21,6 +21,8 @@ add_library(warpengine SHARED ${SRC})
 
 target_link_libraries(warpengine SDL2::SDL2 SDL2_ttf::SDL2_ttf SDL2_image::SDL2_image)
 
+set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Installation directory" FORCE)
+
 install(TARGETS warpengine
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib

@@ -1,39 +1,57 @@
-#include <iostream>
+#include <stdexcept>
 
 #include "CharacterController.h"
 #include "../../Types/Keys.h"
+#include "../Physics/Rigidbody.h"
 
 CharacterController::CharacterController(Object *object, float speed)
+	: object(object)
+	, speed(speed)
 {
-    this->object = object;
-    this->speed = speed;
 }
 
-CharacterController::~CharacterController()
-{
+CharacterController::~CharacterController() { }
 
-}
-
-void CharacterController::onEvent(Event &event)
+void CharacterController::fixedUpdate()
 {
-    if (event.type == EventType::KEYDOWN)
-    {
-        double deltaTime = object->game->getDeltaTime();
-        if (event.key[KEY_W])
-        {
-            object->setPosition(Vector2(object->getPosition().x, object->getPosition().y - speed * deltaTime));
-        }
-        if (event.key[KEY_A])
-        {
-            object->setPosition(Vector2(object->getPosition().x - speed * deltaTime, object->getPosition().y));
-        }
-        if (event.key[KEY_S])
-        {
-            object->setPosition(Vector2(object->getPosition().x, object->getPosition().y + speed * deltaTime));
-        }
-        if (event.key[KEY_D])
-        {
-            object->setPosition(Vector2(object->getPosition().x + speed * deltaTime, object->getPosition().y));
-        }
-    }
+	bool foundEvent = false;
+	Event event;
+
+	for (Event e : object->game->getEvents())
+	{
+		if (e.type == KEYDOWN)
+		{
+			event = e;
+			foundEvent = true;
+			break;
+		}
+	}
+
+	if (!object->getActive() || !foundEvent)
+	{
+		return;
+	}
+
+	Rigidbody *rigidbody = object->getComponent<Rigidbody>();
+	if (!rigidbody)
+	{
+		throw std::runtime_error("Rigidbody not found");
+	}
+
+	if (event.type == KEYDOWN)
+	{
+		if (event.key[KEY_W] || event.key[KEY_SPACE] || event.key[KEY_UP])
+		{
+			rigidbody->applyForce(Vector2(0, -speed));
+		}
+			
+		if (event.key[KEY_A] || event.key[KEY_RIGHT])
+		{
+			rigidbody->applyForce(Vector2(-speed, 0));
+		}
+		if (event.key[KEY_D] || event.key[KEY_LEFT))
+		{
+			rigidbody->applyForce(Vector2(speed, 0));
+		}
+	}
 }

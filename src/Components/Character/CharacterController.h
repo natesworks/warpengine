@@ -6,11 +6,11 @@
 class CharacterController : public Component
 {
 public:
-    CharacterController(Object *object, float speed = 10);
-    ~CharacterController();
-    void onEvent(Event &event) override;
+	CharacterController(Object* object, float speed = 10);
+	~CharacterController();
+	void fixedUpdate() override;
 
 private:
-    Object *object;
-    float speed;
+	Object* object;
+	float speed;
 };
